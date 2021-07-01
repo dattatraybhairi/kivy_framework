@@ -1,4 +1,6 @@
 #:import utils kivy.utils
+
+
 MyLayout:
     scr_mngr: scr_mngr
     orientation: 'vertical'
@@ -94,7 +96,10 @@ MyLayout:
                         pos_hint: {"center_x": 0.1, "center_y": 0.5}
                         background_normal: ''
                         background_color:utils.get_color_from_hex('#1f6dff')
-                        on_release:root.change_screen("screen4")
+
+                        on_release:root.change_screen("screen5")
+                        on_release:root.open_data_table()
+
 
 
                     Button:
@@ -104,8 +109,14 @@ MyLayout:
                         pos_hint: {"center_x": 0.1, "center_y": 0.5}
                         background_normal: ''
                         background_color:utils.get_color_from_hex('#1f6dff')
-                        on_release:root.change_screen("screen5")
+                        on_release:root.change_screen("screen4")
 
+                        MDSpinner:
+                            id:spinner2
+                            size_hint: None, None
+                            size: dp(46), dp(46)
+                            pos_hint: {'center_x': .5, 'center_y': .5}
+                            active: False
 
 
         Screen:
@@ -201,7 +212,7 @@ MyLayout:
 
                                 MDTextField:
                                     id: SerialNumber
-                                    hint_text: " SerialNumber "
+                                    hint_text: " Serial Number "
                                     helper_text_mode: "on_focus"
                                     required: True
 
@@ -370,7 +381,7 @@ MyLayout:
 
 
 #000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
-        Screen:
+        MDScreen:
             id: screen5
             name: 'screen5'
             #export
@@ -388,8 +399,5 @@ MyLayout:
                         text_color: app.theme_cls.primary_color
                         on_release: root.change_screen("screen2")
 
-
-                BoxLayout:
-                    orientation: 'horizontal'
-                    padding: "20dp"
-                    spacing: "20dp"
+                AnchorLayout:
+                    id: container
