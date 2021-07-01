@@ -1,0 +1,30 @@
+<MyGridLayout>
+    name:name
+    food:food
+    color:color
+    GridLayout:
+        cols:1
+        size: root.width,root.height
+        GridLayout:
+            cols:2
+            Label:
+                text:"Name"
+            TextInput:
+                id: name
+                multiline:False
+
+            Label:
+                text:"food"
+            TextInput:
+                id: food
+                multiline:False
+
+            Label:
+                text:"color"
+            TextInput:
+                id: color
+                multiline:False
+        Button:
+            text: "Submit"
+            font_size:50
+            on_press:root.press()

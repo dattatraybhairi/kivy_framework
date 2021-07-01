@@ -1,0 +1,39 @@
+#to use color code feature
+#:import utils kivy.utils
+<MyGridLayout>
+    name:name
+    food:food
+    color:color
+    GridLayout:
+        cols:1
+        size: root.width,root.height
+        GridLayout:
+            cols:2
+            Label:
+                text:"Name"
+            TextInput:
+                id: name
+                background_color:utils.get_color_from_hex('#50fa22')
+                multiline:False
+
+            Label:
+                text:"food"
+            TextInput:
+                id: food
+                background_color:utils.get_color_from_hex('#50fa22')
+                multiline:False
+
+            Label:
+                text:"color"
+            TextInput:
+                id: color
+                background_color:utils.get_color_from_hex('#50fa22')
+                multiline:False
+        Button:
+            text: "Submit"
+            font_size:50
+            on_press:root.press()
+            #RGB-A
+            background_normal: ''
+            #background_color: (238/255.0,1,0,1)
+            background_color:utils.get_color_from_hex('#50000')

@@ -1,0 +1,80 @@
+
+MyLayout:
+    scr_mngr: scr_mngr
+    orientation: 'vertical'
+    ScreenManager:
+        id: scr_mngr
+        Screen:
+            id: screen1
+            name: 'screen1'
+            MDSpinner:
+                id:spinner
+                size_hint: None, None
+                size: dp(46), dp(46)
+                pos_hint: {'center_x': .5, 'center_y': .5}
+                active: False
+            MDToolbar:
+                md_bg_color: 0, 0, 1, 1
+                title: "Login Screen"
+                pos_hint:{"top": 1}
+                elevation: 11
+            BoxLayout:
+                orientation: "vertical"
+                padding: "16dp"
+                spacing: "16dp"
+                size_hint_y: None
+                height: self.minimum_height
+                pos_hint: {"center_y": .6}
+
+                MDLabel:
+                    text: "Log In"
+                    halign: "center"
+                    font_style: "H4"
+                    size_hint_y: None
+                MDTextField:
+                    id: username
+                    hint_text: "Username "
+                    helper_text_mode: "on_focus"
+                    required: True
+
+                MDTextField:
+                    id: password
+                    hint_text: "Password "
+                    helper_text_mode: "on_focus"
+                    required: True
+                    password: True
+
+
+            MDRaisedButton:
+                text: "LOGIN"
+                pos_hint: {"center_x": 0.5, "center_y": 0.3}
+
+                on_release: root.check_data_login()
+        Screen:
+            id: screen2
+            name: 'screen2'
+            BoxLayout:
+                orientation: 'vertical'
+                MDToolbar:
+                    md_bg_color: 0, 0, 1, 1
+                    id: toolbar
+                    title: "Page 2"
+                BoxLayout:
+                    orientation: 'vertical'
+                    MDTabs:
+                        Tab:
+                            text: "Scan"
+
+                        Tab:
+                            text: "Generate"
+                            BoxLayout:
+                                orientation: 'vertical'
+                                padding: "16dp"
+                                spacing: "16dp"
+                                MDTextField:
+                                    id: txtfld
+                                    pos_hint: {'center_x': 0.5, 'center_y': 0.75}
+                                    size_hint: [0.8,0.2]
+                                    hint_text: "Text to be encoded"
+                                    mode: "rectangle"
+                                    on_text: qr.data = txtfld.text

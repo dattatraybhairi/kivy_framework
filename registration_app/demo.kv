@@ -1,0 +1,203 @@
+#:import utils kivy.utils
+MyLayout:
+    scr_mngr: scr_mngr
+    orientation: 'vertical'
+    ScreenManager:
+        id: scr_mngr
+        Screen:
+            id: screen1
+            name: 'screen1'
+            MDSpinner:
+                id:spinner
+                size_hint: None, None
+                size: dp(46), dp(46)
+                pos_hint: {'center_x': .5, 'center_y': .5}
+                active: False
+            MDToolbar:
+                md_bg_color: 0, 0, 1, 1
+                title: "Login Screen"
+                pos_hint:{"top": 1}
+                elevation: 11
+
+                MDIconButton:
+                    icon: "power"
+                    user_font_size: "40sp"
+                    on_release: root.sleep()
+
+
+
+            BoxLayout:
+                orientation: "vertical"
+                padding: "40dp"
+                spacing: "26dp"
+                size_hint_y: None
+                height: self.minimum_height
+                pos_hint: {"center_y": .6}
+
+                MDLabel:
+                    text: "Log In"
+                    halign: "center"
+                    font_style: "H4"
+                    size_hint_y: None
+
+
+                MDTextField:
+                    id: username
+                    hint_text: "Username"
+                    helper_text_mode: "on_focus"
+                    required: True
+
+                MDTextField:
+                    id: password
+                    hint_text: "Password "
+                    helper_text_mode: "on_focus"
+                    required: True
+                    password: True
+
+
+            MDRaisedButton:
+                text: "LOGIN"
+                pos_hint: {"center_x": 0.5, "center_y": 0.3}
+                on_release: root.check_data_login()
+
+# here the end of the screen 1
+
+        Screen:
+            id: screen2
+            name: 'screen2'
+
+            BoxLayout:
+                orientation: 'vertical'
+                MDToolbar:
+
+                    md_bg_color: 0, 0, 1, 1
+                    id: toolbar
+                    title: "Registration App"
+
+                    MDIconButton:
+                        color: 0,1,1,1
+                        icon: "logout"
+                        user_font_size: "40sp"
+                        #text: "Logout"
+                        #pos_hint: {"center_x": 0.1, "center_y": 0.5}
+                        #on_press: root.logout()
+                        on_release: root.show_alert_dialog()
+
+
+                BoxLayout:
+                    orientation: 'horizontal'
+                    padding: "20dp"
+                    spacing: "20dp"
+
+                    Button:
+                        font_size:28
+                        text: "Register"
+                        size_hint: (0.2,0.4)
+                        pos_hint: {"center_x": 0.1, "center_y": 0.5}
+                        background_normal: ''
+                        background_color:utils.get_color_from_hex('#1f6dff')
+
+                    Button:
+
+                        font_size:28
+                        text: "Database"
+                        size_hint: (0.2,0.4)
+                        pos_hint: {"center_x": 0.1, "center_y": 0.5}
+                        background_normal: ''
+                        background_color:utils.get_color_from_hex('#1f6dff')
+
+
+                    Button:
+                        font_size:28
+                        text: "Export"
+                        size_hint: (0.2,0.4)
+                        pos_hint: {"center_x": 0.1, "center_y": 0.5}
+                        background_normal: ''
+                        background_color:utils.get_color_from_hex('#1f6dff')
+                        on_release:root.change_screen("screen3")
+
+
+# here the end of the screen 2
+        Screen:
+            id: screen3
+            name: 'screen3'
+
+
+            BoxLayout:
+                orientation: 'vertical'
+                MDToolbar:
+                    pos_hint_x : None
+                    pos_hint: {"center_y": 0.1}
+                    id: toolbar
+                    md_bg_color: 0, 0, 1, 1
+                    title: "Registration App"
+
+                    MDRaisedButton:
+                        text: "Logout"
+                        pos_hint: {"center_x": 0.1, "center_y": 0.5}
+                        #on_press: root.logout()
+                        on_release: root.show_alert_dialog()
+
+                BoxLayout:
+                    MDRaisedButton:
+                        text: "Logout"
+                        pos_hint: {"center_x": 0.1, "center_y": 0.5}
+                        #on_press: root.logout()
+                        on_release: root.change_screen("screen4")
+
+# here the end of the screen 3
+        Screen:
+            id: screen4
+            name: 'screen4'
+
+            BoxLayout:
+                orientation: 'vertical'
+                MDToolbar:
+                    pos_hint_x : None
+                    pos_hint: {"center_y": 0.1}
+                    id: toolbar
+                    md_bg_color: 0, 0, 1, 1
+                    title: "Registration App"
+
+                    MDRaisedButton:
+                        text: "Logout"
+                        pos_hint: {"center_x": 0.1, "center_y": 0.5}
+                        #on_press: root.logout()
+                        on_release: root.show_alert_dialog()
+
+                GridLayout:
+                    cols: 3
+                    padding: "25dp"
+                    spacing: "25dp"
+                    MDTextField:
+                        id: username
+                        hint_text: "Server"
+                        helper_text_mode: "on_focus"
+                        required: True
+                    MDTextField:
+                        id: username
+                        hint_text: "Installed by "
+                        helper_text_mode: "on_focus"
+                        required: True
+                    MDTextField:
+                        id: username
+                        hint_text: "Area "
+                        helper_text_mode: "on_focus"
+                        required: True
+                    MDTextField:
+                        id: username
+                        hint_text: " OS Type "
+                        helper_text_mode: "on_focus"
+                        required: True
+                    MDTextField:
+                        id: username
+                        hint_text: " Service "
+                        helper_text_mode: "on_focus"
+                        required: True
+
+
+
+
+
+
+
