@@ -1,4 +1,9 @@
 #!/usr/bin/env python
+import time
+import cv2
+import numpy as np
+import pyzbar.pyzbar as pyzbar
+from kivy.core.window import Window
 import MySQLdb
 from kivy.uix.boxlayout import BoxLayout
 from kivy.metrics import dp
@@ -10,7 +15,6 @@ from kivymd.app import MDApp
 from kivymd.uix.button import MDFlatButton
 from kivymd.uix.dialog import MDDialog
 import os
-
 
 class DbCon:
 
@@ -33,9 +37,10 @@ class Tab(FloatLayout, MDTabsBase):
 class MyLayout(BoxLayout, MDApp):
     dialog = None
     wifi = None
-
+    cam_error = None
     # theme_cls = ThemeManager()
     def check_data_login(self):
+        self.ids["RFID"].text = ""
         self.ids['spinner'].active = True
         username = self.ids['username'].text
         password = self.ids['password'].text
@@ -195,7 +200,39 @@ class MyLayout(BoxLayout, MDApp):
         # self.ids.btn.disabled = False
         self.ids.container.remove_widget(self.data_tables)
 
+    def capture(self):
+        self.camera = self.ids['camera']
+        timestr = time.strftime("%Y%m%d_%H%M%S")
+        self.camera.export_to_png("IMG_{}.png".format(timestr))
+        loc = "IMG_{}.png".format(timestr)
+        print("Captured")
+        image = cv2.imread(loc)  # THIS IS SHOWING ERROR, need to use same image in opencv
+        decodedObjects = pyzbar.decode(image)
+        if decodedObjects:
+            for obj in decodedObjects:
+                print("Type:", obj.type)
+                print("Data: ", obj.data, "\n")
+                self.ids["RFID"].text = obj.data
+        else:
+            # cam_error
+            if not self.cam_error:
+                self.cam_error = MDDialog(
+                    title="Read Error ?",
+                    text="Make Sure Image is Clearly Visible?.",
+                    buttons=[
+                        MDFlatButton(
+                            text="OK", text_color=self.theme_cls.primary_color, on_release=lambda _: self.close_cam_error()
+                        ),
+                    ],
+                )
+            self.cam_error.open()
 
+
+
+
+    def close_cam_error(self):
+        self.cam_error.dismiss()
+        self.change_screen("screen3")
 
 class DemoApp(MDApp):
     pass

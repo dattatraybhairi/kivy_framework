@@ -172,7 +172,7 @@ MyLayout:
                                         user_font_size: "40sp"
                                         theme_text_color: "Custom"
                                         text_color: app.theme_cls.primary_color
-                                        on_release: root.change_screen("screen2")
+                                        on_release: root.change_screen("screen6")
 
                                 MDTextField:
                                     id: AssetSN
@@ -372,7 +372,7 @@ MyLayout:
                 MDToolbar:
                     md_bg_color: 0, 0, 1, 1
                     id: toolbar
-                    title: "Database"
+                    title: "Export"
 
                     MDIconButton:
                         icon: "arrow-left-bold-circle"
@@ -398,7 +398,7 @@ MyLayout:
                 MDToolbar:
                     md_bg_color: 0, 0, 1, 1
                     id: toolbar
-                    title: "Export"
+                    title: "DataBase"
 
                     MDIconButton:
                         icon: "arrow-left-bold-circle"
@@ -409,3 +409,44 @@ MyLayout:
 
                 AnchorLayout:
                     id: container
+
+        MDScreen:
+            id: screen6
+            name: 'screen6'
+            #export
+            BoxLayout:
+                orientation: 'vertical'
+                MDToolbar:
+                    md_bg_color: 0, 0, 1, 1
+                    id: toolbar
+                    title: "Scanning Bar-Code/QR Code"
+
+                    MDIconButton:
+                        icon: "arrow-left-bold-circle"
+                        user_font_size: "40sp"
+                        theme_text_color: "Custom"
+                        text_color: app.theme_cls.primary_color
+                        on_release: root.change_screen("screen3")
+
+                #AnchorLayout:
+                    #id: container
+
+                BoxLayout:
+                    orientation: 'vertical'
+                    Camera:
+                        id: camera
+                        #resolution: (640, 480)
+                        play: True
+
+                    MDIconButton:
+                        icon: "camera-iris"
+                        pos_hint: {"center_x": 0.5, "center_y": 0.5}
+                        user_font_size: "40sp"
+                        theme_text_color: "Custom"
+                        text_color: app.theme_cls.primary_color
+                        text: 'Capture'
+                        size_hint_y: None
+                        height: '60dp'
+                        on_press: root.capture()
+                        #on_press: camera.play = not camera.play
+                        on_release: root.change_screen("screen3")
