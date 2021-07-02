@@ -15,11 +15,11 @@ import os
 class DbCon:
 
     def __init__(self):
-        self.db = MySQLdb.connect(user="vacus",passwd="vacus321",db="vacus")
+        self.db = MySQLdb.connect(user="vacus", passwd="vacus321", db="vacus")
         self.c = self.db.cursor()
 
     def get_rows(self):
-        self.c.execute("SELECT * FROM taginfo" )
+        self.c.execute("SELECT * FROM taginfo")
         self.row = self.c.fetchall()
         # print(self.row)
 
@@ -91,7 +91,7 @@ class MyLayout(BoxLayout, MDApp):
     def open_data_table(self):
         self.db = DbCon()
         self.rows = self.db.get_rows()
-        print(self.rows[0])
+        print(len(self.rows))
         self.ids['spinner2'].active = True
         self.data_tables = MDDataTable(
             pos_hint={"center_x": 0, "center_y": 0},
@@ -100,47 +100,41 @@ class MyLayout(BoxLayout, MDApp):
             # check=True,
             rows_num=100,
             column_data=[
-                #page1
-                ("No.", dp(15)), #0
-                ("Physical", dp(25)), #1
-                ("Data Center", dp(25)), #2
-                ("Description", dp(25)), #3
-                ("Device Model", dp(25)), #4
-                ("Floor", dp(10)), #5
-                ("Manufacturer", dp(25)), #6
-                ("Asset Unit Usage ", dp(25)), #7
-                ("Room", dp(10)), #8
-                ("Serial Number", dp(25)), #9
-                ("RackNo", dp(15)), #10
-                ("Column", dp(15)), #11
-                ("Supplier", dp(25)),#12
-                ("Address", dp(25)), #13
-                ("MAC Address1", dp(25)), #14
-                ("MAC Address2", dp(25)),#15
+                # page1
+                ("No.", dp(15)),  # 0
+                ("Physical", dp(25)),  # 1
+                ("Data Center", dp(25)),  # 2
+                ("Description", dp(25)),  # 3
+                ("Device Model", dp(25)),  # 4
+                ("Floor", dp(10)),  # 5
+                ("Manufacturer", dp(25)),  # 6
+                ("Asset Unit Usage ", dp(25)),  # 7
+                ("Room", dp(10)),  # 8
+                ("Serial Number", dp(25)),  # 9
+                ("RackNo", dp(15)),  # 10
+                ("Column", dp(15)),  # 11
+                ("Supplier", dp(25)),  # 12
+                ("Address", dp(25)),  # 13
+                ("MAC Address1", dp(25)),  # 14
+                ("MAC Address2", dp(25)),  # 15
                 # #page2 15
-                ("Equipment Category", dp(25)),# 16
-                # ("Weight(KG)", dp(25)),
-                # ("Inventory Code", dp(25)),
-                # ("Life Cycle", dp(25)),
-                # ("Power(W)", dp(25)),
-                # ("Last Maintenance Staff", dp(25)),
-                # ("Maintenance Cycle", dp(25)),
-                # ("Current(A)", dp(25)),
-                # ("Next Maintenance Staff", dp(25)),
-                # ("Principal", dp(25)),
-                # ("Voltage(V)", dp(25)),
-                # ("Last Updated Time", dp(25)),
-                # ("Maintenance Contact", dp(25)),
-                # ("First Use Time", dp(25)),
-                # ("Next Update Time", dp(25)),
+                ("Equipment Category", dp(25)),  # 16
+                ("Weight(KG)", dp(25)),  # 17
+                ("Inventory Code", dp(25)),  # 18
+                ("Life Cycle", dp(25)),  # 19
+                ("Power(W)", dp(25)),  # 20
+                ("Last Maintenance Staff", dp(25)),  # 21
+                ("Maintenance Cycle", dp(25)),  # 22
+                ("Current(A)", dp(25)),  # 23
+                ("Next Maintenance Staff", dp(25)),  # 24
+                ("Principal", dp(25)),  # 25
+                ("Voltage(V)", dp(25)),  # 26
+                ("Last Updated Time", dp(25)),  # 27
+                ("Maintenance Contact", dp(25)),  # 28
+                ("First Use Time", dp(25)),  # 29
+                ("Next Update Time", dp(25)),  # 30
+
                 #
-                #
-
-
-
-
-
-
 
             ],
             row_data=[
@@ -162,27 +156,29 @@ class MyLayout(BoxLayout, MDApp):
                  row[15],
                  row[16],
                  #
-                 # row[17],
-                 # row[18],
-                 # row[19],
-                 # row[20],
-                 # row[21],
-                 #
-                 # row[22],
-                 # row[23],
-                 # row[24],
-                 # row[25],
-                 # row[26],
-                 # row[27],
-                 # row[28],
-                 # row[29],
-                 #row[30]
-                 #row[31],
+                 row[17],
+                 row[18],
+                 row[19],
+                 row[20],
+                 row[21],
+
+                 row[22],
+                 row[23],
+                 row[24],
+                 row[25],
+                 row[26],
+                 row[27],
+                 row[28],
+                 row[29],
+                 row[30],
+                 # row[31],
 
                  ) for row in self.rows
             ],
         )
 
+        for row in self.rows:
+            print(len(row))
         # self.data_tables.ids.container.add_widget(
         #     MDRaisedButton(
         #         text="CLOSE",
@@ -198,6 +194,7 @@ class MyLayout(BoxLayout, MDApp):
     def close_data_table(self, *args):
         # self.ids.btn.disabled = False
         self.ids.container.remove_widget(self.data_tables)
+
 
 
 class DemoApp(MDApp):

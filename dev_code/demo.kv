@@ -160,12 +160,20 @@ MyLayout:
                                 padding: "32dp"
                                 spacing: "32dp"
 
+                                BoxLayout:
+                                    orientation: 'horizontal'
+                                    MDTextField:
+                                        id: RFID
+                                        hint_text: "RFID Physical No"
+                                        helper_text_mode: "on_focus"
+                                        required: True
+                                    MDIconButton:
+                                        icon: "data-matrix-scan"
+                                        user_font_size: "40sp"
+                                        theme_text_color: "Custom"
+                                        text_color: app.theme_cls.primary_color
+                                        on_release: root.change_screen("screen2")
 
-                                MDTextField:
-                                    id: RFID
-                                    hint_text: "RFID Physical No"
-                                    helper_text_mode: "on_focus"
-                                    required: True
                                 MDTextField:
                                     id: AssetSN
                                     hint_text: " Asset SN "
