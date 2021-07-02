@@ -1,0 +1,13 @@
+<Manager>:
+    Screen:
+        name: 'first'
+        MDRaisedButton:
+            text: 'go to 2'
+            #pos_hint: {'center_x': .5, 'center_y': .1}
+            on_release: root.current = 'second'
+    Screen:
+        name: 'second'
+        MDRaisedButton:
+            text: 'open table'
+            on_release: app.open_table()
+            #pos_hint: {'center_x': .5, 'center_y': .5}
