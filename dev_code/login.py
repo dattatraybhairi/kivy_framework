@@ -1,4 +1,6 @@
 #!/usr/bin/env python
+from kivymd.toast import toast
+from kivymd.uix.filemanager import MDFileManager
 import time
 import cv2
 import numpy as np
@@ -35,10 +37,20 @@ class Tab(FloatLayout, MDTabsBase):
 
 
 class MyLayout(BoxLayout, MDApp):
+
     dialog = None
     wifi = None
     cam_error = None
     # theme_cls = ThemeManager()
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.manager_open = False
+        self.file_manager = MDFileManager(
+            exit_manager=self.exit_manager,
+            select_path=self.select_path,
+            preview=True,
+        )
+
     def check_data_login(self):
         self.ids["RFID"].text = ""
         self.ids['spinner'].active = True
@@ -96,13 +108,13 @@ class MyLayout(BoxLayout, MDApp):
     def open_data_table(self):
         self.db = DbCon()
         self.rows = self.db.get_rows()
-        print(len(self.rows))
+        # print(len(self.rows))
         self.ids['spinner2'].active = True
         self.data_tables = MDDataTable(
             pos_hint={"center_x": 0, "center_y": 0},
             size_hint=(1, 1),
             # use_pagination=True,
-            # check=True,
+            check=True,
             rows_num=100,
             column_data=[
                 # page1
@@ -182,8 +194,7 @@ class MyLayout(BoxLayout, MDApp):
             ],
         )
 
-        for row in self.rows:
-            print(len(row))
+
         # self.data_tables.ids.container.add_widget(
         #     MDRaisedButton(
         #         text="CLOSE",
@@ -228,11 +239,29 @@ class MyLayout(BoxLayout, MDApp):
             self.cam_error.open()
 
 
-
-
     def close_cam_error(self):
         self.cam_error.dismiss()
         self.change_screen("screen3")
+
+
+
+    def file_manager_open(self):
+        self.file_manager.show('/home/scientist/')  # output manager to the screen
+        self.manager_open = True
+
+    def select_path(self, path):
+
+        self.exit_manager()
+        toast(path)
+
+    def exit_manager(self, *args):
+        '''Called when the user reaches the root of the directory tree.'''
+
+        self.manager_open = False
+        self.file_manager.close()
+
+
+
 
 class DemoApp(MDApp):
     pass

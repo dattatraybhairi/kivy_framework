@@ -1,6 +1,4 @@
 #:import utils kivy.utils
-
-
 MyLayout:
     scr_mngr: scr_mngr
     orientation: 'vertical'
@@ -68,6 +66,7 @@ MyLayout:
                     md_bg_color: 0, 0, 1, 1
                     id: toolbar
                     title: "Server Registration Window"
+                    pos_hint:{"top": 1}
 
                     MDRaisedButton:
                         text: "Logout"
@@ -78,39 +77,43 @@ MyLayout:
                     orientation: 'horizontal'
                     padding: "20dp"
                     spacing: "20dp"
+                    pos_hint: {"center_x": 0.55, "center_y": 0.8}
 
-                    Button:
-                        font_size:28
-                        text: "Register"
-                        size_hint: (0.2,0.4)
-                        pos_hint: {"center_x": 0.1, "center_y": 0.5}
-                        background_normal: ''
-                        background_color:utils.get_color_from_hex('#1f6dff')
-                        on_release:root.change_screen("screen3")
+                    GridLayout:
+                        #orientation: "horizontal"
+                        pos_hint: {"center_x": 0.5, "center_y": 0.7}
+                        size_hint_y: None
+                        cols:1
+                        MDIconButton:
+                            icon: "file-document-edit"
+                            user_font_size: "140sp"
+                            theme_text_color: "Custom"
+                            text_color: app.theme_cls.primary_color
+                            on_release:root.change_screen("screen3")
+                        MDRectangleFlatButton:
+                            text: "         Register New           "
+                            text_color: app.theme_cls.primary_color
+                            on_release:root.change_screen("screen3")
 
-                    Button:
+                    GridLayout:
+                        pos_hint: {"center_x": 0.4, "center_y": 0.7}
+                        #orientation: "horizontal"
+                        size_hint_y: None
+                        cols:1
+                        MDIconButton:
+                            icon: "database-check"
+                            text: "Roor"
+                            user_font_size: "140sp"
+                            theme_text_color: "Custom"
+                            text_color: app.theme_cls.primary_color
+                            on_release:root.change_screen("screen5")
+                            on_release:root.open_data_table()
 
-                        font_size:28
-                        text: "Database"
-                        size_hint: (0.2,0.4)
-                        pos_hint: {"center_x": 0.1, "center_y": 0.5}
-                        background_normal: ''
-                        background_color:utils.get_color_from_hex('#1f6dff')
-
-                        on_release:root.change_screen("screen5")
-                        on_release:root.open_data_table()
-
-
-
-                    Button:
-                        font_size:28
-                        text: "Export"
-                        size_hint: (0.2,0.4)
-                        pos_hint: {"center_x": 0.1, "center_y": 0.5}
-                        background_normal: ''
-                        background_color:utils.get_color_from_hex('#1f6dff')
-                        on_release:root.change_screen("screen4")
-
+                        MDRectangleFlatButton:
+                            text: "             Database                "
+                            text_color: app.theme_cls.primary_color
+                            on_release:root.change_screen("screen5")
+                            on_release:root.open_data_table()
                         MDSpinner:
                             id:spinner2
                             size_hint: None, None
@@ -118,6 +121,24 @@ MyLayout:
                             pos_hint: {'center_x': .5, 'center_y': .5}
                             active: False
 
+                    GridLayout:
+                        pos_hint: {"center_x": 0.4, "center_y": 0.7}
+                        size_hint_y: None
+                        cols:1
+                        MDIconButton:
+                            icon: "import"
+                            text: "Roor"
+                            user_font_size: "140sp"
+                            theme_text_color: "Custom"
+                            text_color: app.theme_cls.primary_color
+                            on_release:root.change_screen("screen4")
+                        MDRectangleFlatButton:
+                            text: "              Export                "
+                            text_color: app.theme_cls.primary_color
+                            on_release:root.change_screen("screen4")
+
+
+#00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
 
         Screen:
             id: screen3
@@ -128,6 +149,7 @@ MyLayout:
                     md_bg_color: 0, 0, 1, 1
                     id: toolbar
                     title: "Register"
+                    pos_hint:{"top": 1}
                     MDIconButton:
                         icon: "arrow-left-bold-circle"
                         user_font_size: "40sp"
@@ -363,7 +385,7 @@ MyLayout:
 
 
 #000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
-        Screen:
+        Screen: #export
             id: screen4
             name: 'screen4'
             #database
@@ -373,6 +395,7 @@ MyLayout:
                     md_bg_color: 0, 0, 1, 1
                     id: toolbar
                     title: "Export"
+                    pos_hint:{"top": 1}
 
                     MDIconButton:
                         icon: "arrow-left-bold-circle"
@@ -386,6 +409,55 @@ MyLayout:
                     orientation: 'horizontal'
                     padding: "20dp"
                     spacing: "20dp"
+                    pos_hint: {"center_x": 0.53, "center_y": 0.8}
+
+                    GridLayout:
+                        #orientation: "horizontal"
+                        pos_hint: {"center_x": 0.4, "center_y": 0.7}
+                        size_hint_y: None
+                        cols:1
+                        MDIconButton:
+                            icon: "wifi-cog"
+                            user_font_size: "140sp"
+                            theme_text_color: "Custom"
+                            text_color: app.theme_cls.primary_color
+                            on_release: root.change_screen("screen7")
+                        MDRectangleFlatButton:
+                            text: "          Wifi Setup           "
+                            text_color: app.theme_cls.primary_color
+
+                    GridLayout:
+                        pos_hint: {"center_x": 0.4, "center_y": 0.7}
+                        #orientation: "horizontal"
+                        size_hint_y: None
+                        cols:1
+                        MDIconButton:
+                            icon: "cloud-upload"
+                            text: "Roor"
+                            user_font_size: "140sp"
+                            theme_text_color: "Custom"
+                            text_color: app.theme_cls.primary_color
+                            on_release: root.file_manager_open()
+                        MDRectangleFlatButton:
+                            text: "          Upload File           "
+                            text_color: app.theme_cls.primary_color
+                            on_release: root.file_manager_open()
+
+                    GridLayout:
+                        pos_hint: {"center_x": 0.4, "center_y": 0.7}
+                        size_hint_y: None
+                        cols:1
+                        MDIconButton:
+                            icon: "database-remove"
+                            text: "Roor"
+                            user_font_size: "140sp"
+                            theme_text_color: "Custom"
+                            text_color: app.theme_cls.primary_color
+                            #on_release: root.change_screen("screen2")
+                        MDRectangleFlatButton:
+                            text: "          Delete Database        "
+                            text_color: app.theme_cls.primary_color
+
 
 
 #000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
@@ -409,7 +481,7 @@ MyLayout:
 
                 AnchorLayout:
                     id: container
-
+#000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
         MDScreen:
             id: screen6
             name: 'screen6'
@@ -420,6 +492,7 @@ MyLayout:
                     md_bg_color: 0, 0, 1, 1
                     id: toolbar
                     title: "Scanning Bar-Code/QR Code"
+                    pos_hint:{"top": 1}
 
                     MDIconButton:
                         icon: "arrow-left-bold-circle"
@@ -427,6 +500,7 @@ MyLayout:
                         theme_text_color: "Custom"
                         text_color: app.theme_cls.primary_color
                         on_release: root.change_screen("screen3")
+
 
                 #AnchorLayout:
                     #id: container
@@ -450,3 +524,72 @@ MyLayout:
                         on_press: root.capture()
                         #on_press: camera.play = not camera.play
                         on_release: root.change_screen("screen3")
+
+
+        MDScreen:
+            id: screen7 #wifi-config
+            name: 'screen7'
+            MDSpinner:
+                id:spinner
+                size_hint: None, None
+                size: dp(46), dp(46)
+                pos_hint: {'center_x': .5, 'center_y': .5}
+                active: False
+            MDToolbar:
+                md_bg_color: 0, 0, 1, 1
+                title: "WIFI Configuration"
+                pos_hint:{"top": 1}
+                elevation: 11
+                MDIconButton:
+                    icon: "arrow-left-bold-circle"
+                    user_font_size: "40sp"
+                    theme_text_color: "Custom"
+                    text_color: app.theme_cls.primary_color
+                    on_release: root.change_screen("screen4")
+
+            BoxLayout:
+                orientation: "vertical"
+                padding: "25dp"
+                spacing: "25dp"
+                size_hint_y: None
+                height: self.minimum_height
+                pos_hint: {"center_y": .63}
+
+                MDLabel:
+                    text: "Enter WIFI Credentials"
+                    halign: "left"
+                    font_size: 16
+                    #font_style: "H2"
+                    #size_hint_y:
+                MDTextField:
+                    id: username
+                    hint_text: "SSID "
+                    helper_text_mode: "on_focus"
+                    required: True
+
+                MDTextField:
+                    id: password
+                    hint_text: "Password "
+                    helper_text_mode: "on_focus"
+                    required: True
+                    password: False
+
+            MDRaisedButton:
+                text: "Connect"
+                #halign:"center"
+                pos_hint: {"center_x": 0.9, "center_y": 0.4}
+
+            BoxLayout:
+                orientation: "horizontal"
+                padding: "25dp"
+                spacing: "25dp"
+                MDRaisedButton:
+                    text: "IP Address"
+                    #halign:"center"
+                    pos_hint: {"center_x": 0.5, "center_y": 0.2}
+
+                MDTextField:
+                    id: ip
+                    pos_hint: {"center_x": 0.5, "center_y": 0.2}
+                    hint_text: "0.0.0.0"
+

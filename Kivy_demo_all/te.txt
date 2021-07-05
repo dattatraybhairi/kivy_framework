@@ -1,0 +1,94 @@
+Button:
+                        font_size:28
+                        text: "Register"
+                        size_hint: (0.2,0.4)
+                        pos_hint: {"center_x": 0.1, "center_y": 0.5}
+                        background_normal: ''
+                        background_color:utils.get_color_from_hex('#1f6dff')
+                        on_release:root.change_screen("screen3")
+
+                    Button:
+                        font_size:28
+                        text: "Database"
+                        size_hint: (0.2,0.4)
+                        pos_hint: {"center_x": 0.1, "center_y": 0.5}
+                        background_normal: ''
+                        background_color:utils.get_color_from_hex('#1f6dff')
+                        on_release:root.change_screen("screen5")
+                        on_release:root.open_data_table()
+
+
+
+                    Button:
+                        font_size:28
+                        text: "Export"
+                        size_hint: (0.2,0.4)
+                        pos_hint: {"center_x": 0.1, "center_y": 0.5}
+                        background_normal: ''
+                        background_color:utils.get_color_from_hex('#1f6dff')
+                        on_release:root.change_screen("screen4")
+
+                        MDSpinner:
+                            id:spinner2
+                            size_hint: None, None
+                            size: dp(46), dp(46)
+                            pos_hint: {'center_x': .5, 'center_y': .5}
+                            active: False
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                            GridLayout:
+                            pos_hint: {"center_x": 0.5, "center_y": 0.8}
+                            padding: "20dp"
+                            spacing: "20dp"
+                            cols:2
+                            MDTextField:
+                                id: SSID
+                                hint_text: " Enter SSID "
+                                helper_text_mode: "on_focus"
+                                required: True
+                            BoxLayout:
+
+                                orientation: 'horizontal'
+                                MDTextField:
+                                    id: PASSWD
+                                    hint_text: " Enter Password "
+                                    helper_text_mode: "on_focus"
+                                    required: True
+                                MDIconButton:
+                                    icon: "wifi-sync"
+                                    user_font_size: "40sp"
+                                    theme_text_color: "Custom"
+                                    text_color: app.theme_cls.primary_color
+                                    #on_release: root.change_screen("screen6")
+
+                            GridLayout:
+                                cols : 2
+                                padding: "8dp"
+                                spacing: "25dp"
+                                MDRaisedButton:
+                                    text: "IP Address"
+                                    pos_hint: {"center_x": 0.5, "center_y": 0.7}
+                                    on_release: root.check_data_login()
+                                MDTextField:
+                                    id: ip
+                                    hint_text: "IP Address"

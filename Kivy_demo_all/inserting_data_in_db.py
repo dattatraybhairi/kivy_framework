@@ -20,7 +20,7 @@ if __name__ == '__main__':
           "Voltage INT, FirstUseTime DATE, IneventoryCode VARCHAR(64), LastMaintenanceStaff VARCHAR(64),NextMaintenanceStaff VARCHAR(64), LastUpdateTime VARCHAR(64)," \
           "NextUpdatedTime VARCHAR(64));"
     cursror.execute(sql)
-    insert = "insert into taginfo values(3,'lg','WERedGE2450', 1,2,'NETWORKINRACK', 'HDFC', '2nd floor', 'Network', '2nd', '15-02-a0-c2', 'ITRoom','Dell','SN123456','TECHLAB', '15-c2-15-00', " \
+    insert = "insert into taginfo values(10,'uks','WERedGE2450', 1,2,'NETWORKINRACK', 'HDFC', '2nd floor', 'Network', '2nd', '15-02-a0-c2', 'ITRoom','Dell','SN123456','TECHLAB', '15-c2-15-00', " \
              "'Server', '3 years', 'None', '3000 usd', 'TECHLAB',  28,300,1,230,'2021-01-01', 'INV012', 'sagar', 'datta', '2021-01-01', '2021-02-01')"
 
     cursror.execute(insert)
