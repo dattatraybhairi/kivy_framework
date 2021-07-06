@@ -1,3 +1,6 @@
+#:import ZBarCam kivy_garden.zbarcam.ZBarCam
+#:import ZBarSymbol pyzbar.pyzbar.ZBarSymbol
+#:import QRCodeWidget kivy_garden.qrcode
 
 MyLayout:
     scr_mngr: scr_mngr
@@ -25,7 +28,7 @@ MyLayout:
                 size_hint_y: None
                 height: self.minimum_height
                 pos_hint: {"center_y": .6}
-
+                
                 MDLabel:
                     text: "Log In"
                     halign: "center"
@@ -36,7 +39,7 @@ MyLayout:
                     hint_text: "Username "
                     helper_text_mode: "on_focus"
                     required: True
-
+                
                 MDTextField:
                     id: password
                     hint_text: "Password "
@@ -63,8 +66,24 @@ MyLayout:
                     orientation: 'vertical'
                     MDTabs:
                         Tab:
-                            text: "Scan"
+                            text: "Scan"        
+                            ZBarCam:
+                                id: zbarcam
+                                # optional, by default checks all types
+                                code_types: ZBarSymbol.QRCODE, ZBarSymbol.EAN13,ZBarSymbol.CODE128
+                                #code_types: ZBarSymbol.QRCODE, ZBarSymbol.EAN13
+                                pos_hint: {'center_x': 0.5, 'center_y': 0.75}
+                                size_hint: [1, 1]
+                            MDLabel:
+                                id: qrlabel
+                                #size_hint: None, None
+                                size: self.texture_size[0], 50
+                                pos_hint: {'center_x': 0.5, 'center_y': 0.3}
+                                halign: "center"
+                                text: ', '.join([str(symbol.data) for symbol in zbarcam.symbols])
+                                on_text: root.calc(self.text)
 
+                                opacity: 1
                         Tab:
                             text: "Generate"
                             BoxLayout:
@@ -78,3 +97,10 @@ MyLayout:
                                     hint_text: "Text to be encoded"
                                     mode: "rectangle"
                                     on_text: qr.data = txtfld.text
+                                QRCodeWidget:
+                                    id: qr
+                                    data: ''
+                                    size_hint: [0.8,0.3]
+                                    pos_hint: {'center_x': 0.5, 'center_y': 0.3}
+                                    show_border: False 
+                        

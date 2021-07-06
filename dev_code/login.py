@@ -1,4 +1,7 @@
 #!/usr/bin/env python
+import socket
+import subprocess
+import codecs
 from kivymd.toast import toast
 from kivymd.uix.filemanager import MDFileManager
 import time
@@ -17,6 +20,7 @@ from kivymd.app import MDApp
 from kivymd.uix.button import MDFlatButton
 from kivymd.uix.dialog import MDDialog
 import os
+
 
 class DbCon:
 
@@ -37,10 +41,10 @@ class Tab(FloatLayout, MDTabsBase):
 
 
 class MyLayout(BoxLayout, MDApp):
-
     dialog = None
     wifi = None
     cam_error = None
+
     # theme_cls = ThemeManager()
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -78,6 +82,19 @@ class MyLayout(BoxLayout, MDApp):
 
     def calc(self, instance):
         print(self.ids['qrlabel'].text)
+        if self.ids['qrlabel'].text != "":
+            self.scanned  = str(self.ids['qrlabel'].text)
+            text = self.scanned.split("b")
+            self.ids["RFID"].text = str(text[1]).replace("'", "")
+            self.change_screen("screen3")
+            self.ids["zbarcam"].xcamera.play = False
+        else :
+            self.change_screen("screen6")
+            self.ids["zbarcam"].xcamera.play = True
+
+    def scan(self):
+        self.change_screen("screen6")
+        self.ids["zbarcam"].xcamera.play = True
 
     def show_alert_dialog(self):
         if not self.dialog:
@@ -113,9 +130,9 @@ class MyLayout(BoxLayout, MDApp):
         self.data_tables = MDDataTable(
             pos_hint={"center_x": 0, "center_y": 0},
             size_hint=(1, 1),
-            # use_pagination=True,
-            check=True,
-            rows_num=100,
+            use_pagination=True,
+            # check=True,
+            rows_num=5,
             column_data=[
                 # page1
                 ("No.", dp(15)),  # 0
@@ -194,55 +211,11 @@ class MyLayout(BoxLayout, MDApp):
             ],
         )
 
-
-        # self.data_tables.ids.container.add_widget(
-        #     MDRaisedButton(
-        #         text="CLOSE",
-        #         pos_hint={"right": 1},
-        #         on_release=self.close_data_table,
-        #     )
-        # )
-
-        # self.ids.btn.disabled = True
         self.ids.container.add_widget(self.data_tables)
         self.ids['spinner2'].active = False
 
     def close_data_table(self, *args):
-        # self.ids.btn.disabled = False
         self.ids.container.remove_widget(self.data_tables)
-
-    def capture(self):
-        self.camera = self.ids['camera']
-        timestr = time.strftime("%Y%m%d_%H%M%S")
-        self.camera.export_to_png("IMG_{}.png".format(timestr))
-        loc = "IMG_{}.png".format(timestr)
-        print("Captured")
-        image = cv2.imread(loc)  # THIS IS SHOWING ERROR, need to use same image in opencv
-        decodedObjects = pyzbar.decode(image)
-        if decodedObjects:
-            for obj in decodedObjects:
-                print("Type:", obj.type)
-                print("Data: ", obj.data, "\n")
-                self.ids["RFID"].text = obj.data
-        else:
-            # cam_error
-            if not self.cam_error:
-                self.cam_error = MDDialog(
-                    title="Read Error ?",
-                    text="Make Sure Image is Clearly Visible?.",
-                    buttons=[
-                        MDFlatButton(
-                            text="OK", text_color=self.theme_cls.primary_color, on_release=lambda _: self.close_cam_error()
-                        ),
-                    ],
-                )
-            self.cam_error.open()
-
-
-    def close_cam_error(self):
-        self.cam_error.dismiss()
-        self.change_screen("screen3")
-
 
 
     def file_manager_open(self):
@@ -260,7 +233,38 @@ class MyLayout(BoxLayout, MDApp):
         self.manager_open = False
         self.file_manager.close()
 
+    def connect_wifi(self):
+        self.ids['spinnerwifi'].active = True
+        SSID = self.ids["ssid"].text
+        PASS = self.ids["passkey"].text
+        self.config_lines = [
+            'ctrl_interface=DIR=var/run/wpa_supplicant Group=netdev',
+            'update_config=1',
+            'country=IN',
+            '\n',
+            'network={',
+            '\tssid="{}"'.format(SSID),
+            '\tpsk="{}"'.format(PASS),
+            '\tkey_mgmt=WPA-PSK',
+            '}'
+        ]
 
+        self.config = '\n'.join(self.config_lines)
+        print(self.config)
+
+        # with open("/etc/wpa_supplicant/wpa_supplicant.conf", "w") as wifi:
+        #     wifi.write(self.config)
+
+        print("Wifi config added")
+        self.ids['spinnerwifi'].active = False
+
+        subprocess.call(["sudo", "systemctl", "daemon-reload"])
+        subprocess.call(["sudo", "systemctl", "restart", "dhcpcd"])
+        # subprocess.call(["sudo", "dhclient", "wlan0"])
+        # print("changed Network")
+        self.ids['wifi_connect'].text = "Connected"
+        myip = socket.gethostbyname(socket.gethostname())
+        self.ids['ip'].text = myip
 
 
 class DemoApp(MDApp):

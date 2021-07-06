@@ -1,4 +1,8 @@
 #:import utils kivy.utils
+#:import ZBarCam kivy_garden.zbarcam.ZBarCam
+#:import ZBarSymbol pyzbar.pyzbar.ZBarSymbol
+#:import QRCodeWidget kivy_garden.qrcode
+
 MyLayout:
     scr_mngr: scr_mngr
     orientation: 'vertical'
@@ -67,11 +71,22 @@ MyLayout:
                     id: toolbar
                     title: "Server Registration Window"
                     pos_hint:{"top": 1}
+                    spacing:"20dp"
+                    #padding:"20dp"
+                    MDIconButton:
+                        icon: "wifi-cog"
+                        user_font_size: "40sp"
+                        theme_text_color: "Custom"
+                        text_color: app.theme_cls.primary_color
+                        on_release: root.change_screen("screen7")
 
                     MDRaisedButton:
                         text: "Logout"
                         pos_hint: {"center_x": 0.1, "center_y": 0.5}
                         on_release: root.show_alert_dialog()
+
+
+
 
                 BoxLayout:
                     orientation: 'horizontal'
@@ -150,6 +165,7 @@ MyLayout:
                     id: toolbar
                     title: "Register"
                     pos_hint:{"top": 1}
+                    spacing:"20dp"
                     MDIconButton:
                         icon: "arrow-left-bold-circle"
                         user_font_size: "40sp"
@@ -190,11 +206,12 @@ MyLayout:
                                         helper_text_mode: "on_focus"
                                         required: True
                                     MDIconButton:
+                                        id: "scan_button"
                                         icon: "data-matrix-scan"
                                         user_font_size: "40sp"
                                         theme_text_color: "Custom"
                                         text_color: app.theme_cls.primary_color
-                                        on_release: root.change_screen("screen6")
+                                        on_release: root.scan()
 
                                 MDTextField:
                                     id: AssetSN
@@ -396,6 +413,7 @@ MyLayout:
                     id: toolbar
                     title: "Export"
                     pos_hint:{"top": 1}
+                    spacing:"20dp"
 
                     MDIconButton:
                         icon: "arrow-left-bold-circle"
@@ -407,27 +425,12 @@ MyLayout:
 
                 BoxLayout:
                     orientation: 'horizontal'
-                    padding: "20dp"
-                    spacing: "20dp"
-                    pos_hint: {"center_x": 0.53, "center_y": 0.8}
+                    padding: "40dp"
+                    spacing: "15dp"
+                    pos_hint: {"center_x": 0.61, "center_y": 0.8}
 
                     GridLayout:
-                        #orientation: "horizontal"
-                        pos_hint: {"center_x": 0.4, "center_y": 0.7}
-                        size_hint_y: None
-                        cols:1
-                        MDIconButton:
-                            icon: "wifi-cog"
-                            user_font_size: "140sp"
-                            theme_text_color: "Custom"
-                            text_color: app.theme_cls.primary_color
-                            on_release: root.change_screen("screen7")
-                        MDRectangleFlatButton:
-                            text: "          Wifi Setup           "
-                            text_color: app.theme_cls.primary_color
-
-                    GridLayout:
-                        pos_hint: {"center_x": 0.4, "center_y": 0.7}
+                        pos_hint: {"center_x": 0.1, "center_y": 0.7}
                         #orientation: "horizontal"
                         size_hint_y: None
                         cols:1
@@ -471,6 +474,7 @@ MyLayout:
                     md_bg_color: 0, 0, 1, 1
                     id: toolbar
                     title: "DataBase"
+                    spacing:"20dp"
 
                     MDIconButton:
                         icon: "arrow-left-bold-circle"
@@ -493,6 +497,7 @@ MyLayout:
                     id: toolbar
                     title: "Scanning Bar-Code/QR Code"
                     pos_hint:{"top": 1}
+                    spacing:"20dp"
 
                     MDIconButton:
                         icon: "arrow-left-bold-circle"
@@ -507,45 +512,47 @@ MyLayout:
 
                 BoxLayout:
                     orientation: 'vertical'
-                    Camera:
-                        id: camera
-                        #resolution: (640, 480)
-                        play: True
+                    ZBarCam:
+                        id: zbarcam
+                        # optional, by default checks all types
+                        code_types: ZBarSymbol.QRCODE, ZBarSymbol.EAN13,ZBarSymbol.CODE128
+                        #code_types: ZBarSymbol.QRCODE, ZBarSymbol.EAN13
+                        pos_hint: {'center_x': 0.5, 'center_y': 0.75}
+                        size_hint: [20, 15]
 
-                    MDIconButton:
-                        icon: "camera-iris"
-                        pos_hint: {"center_x": 0.5, "center_y": 0.5}
-                        user_font_size: "40sp"
-                        theme_text_color: "Custom"
-                        text_color: app.theme_cls.primary_color
-                        text: 'Capture'
-                        size_hint_y: None
-                        height: '60dp'
-                        on_press: root.capture()
-                        #on_press: camera.play = not camera.play
-                        on_release: root.change_screen("screen3")
+                    MDLabel:
+                        id: qrlabel
+                        #size_hint: None, None
+                        size: self.texture_size[0],10
+                        pos_hint: {'center_x': 0.5, 'center_y': 0.1}
+                        halign: "center"
+                        text: ', '.join([str(symbol.data) for symbol in zbarcam.symbols])
+                        #text: 'rescan'
+                        on_text: root.calc(self.text)
+                        opacity: 1
 
 
         MDScreen:
             id: screen7 #wifi-config
             name: 'screen7'
             MDSpinner:
-                id:spinner
+                id:spinnerwifi
                 size_hint: None, None
                 size: dp(46), dp(46)
                 pos_hint: {'center_x': .5, 'center_y': .5}
-                active: False
+                active: True
             MDToolbar:
                 md_bg_color: 0, 0, 1, 1
                 title: "WIFI Configuration"
                 pos_hint:{"top": 1}
                 elevation: 11
+                spacing:"20dp"
                 MDIconButton:
                     icon: "arrow-left-bold-circle"
                     user_font_size: "40sp"
                     theme_text_color: "Custom"
                     text_color: app.theme_cls.primary_color
-                    on_release: root.change_screen("screen4")
+                    on_release: root.change_screen("screen2")
 
             BoxLayout:
                 orientation: "vertical"
@@ -562,22 +569,24 @@ MyLayout:
                     #font_style: "H2"
                     #size_hint_y:
                 MDTextField:
-                    id: username
+                    id: ssid
                     hint_text: "SSID "
                     helper_text_mode: "on_focus"
                     required: True
 
                 MDTextField:
-                    id: password
+                    id: passkey
                     hint_text: "Password "
                     helper_text_mode: "on_focus"
                     required: True
                     password: False
 
             MDRaisedButton:
+                id:wifi_connect
                 text: "Connect"
                 #halign:"center"
                 pos_hint: {"center_x": 0.9, "center_y": 0.4}
+                on_release: root.connect_wifi()
 
             BoxLayout:
                 orientation: "horizontal"
@@ -591,5 +600,5 @@ MyLayout:
                 MDTextField:
                     id: ip
                     pos_hint: {"center_x": 0.5, "center_y": 0.2}
-                    hint_text: "0.0.0.0"
+
 
