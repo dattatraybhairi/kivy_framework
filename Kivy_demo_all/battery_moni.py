@@ -12,7 +12,7 @@ def convertTime(seconds):
 # returns a tuple
 battery = psutil.sensors_battery()
 
-print("Battery percentage : ", battery.percent))
+print("Battery percentage : ", battery.percent)
 print("Power plugged in : ", battery.power_plugged)
 
 # converting seconds to hh:mm:ss

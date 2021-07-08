@@ -1,25 +1,28 @@
 #!/usr/bin/env python
 import socket
 import subprocess
-import codecs
+
+from kivy.animation import Animation
+from kivy.uix.vkeyboard import VKeyboard
 from kivymd.toast import toast
 from kivymd.uix.filemanager import MDFileManager
-import time
-import cv2
-import numpy as np
-import pyzbar.pyzbar as pyzbar
-from kivy.core.window import Window
+from kivy_garden import zbarcam
 import MySQLdb
 from kivy.uix.boxlayout import BoxLayout
 from kivy.metrics import dp
 from kivymd.uix.datatables import MDDataTable
 from kivy.core.window import Window
+
 from kivymd.uix.tab import MDTabsBase
 from kivy.uix.floatlayout import FloatLayout
 from kivymd.app import MDApp
 from kivymd.uix.button import MDFlatButton
 from kivymd.uix.dialog import MDDialog
 import os
+
+from self import self
+
+login_key = False
 
 
 class DbCon:
@@ -32,7 +35,6 @@ class DbCon:
         self.c.execute("SELECT * FROM taginfo")
         self.row = self.c.fetchall()
         # print(self.row)
-
         return self.row
 
 
@@ -49,6 +51,7 @@ class MyLayout(BoxLayout, MDApp):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.manager_open = False
+        self.login_key = False
         self.file_manager = MDFileManager(
             exit_manager=self.exit_manager,
             select_path=self.select_path,
@@ -56,6 +59,7 @@ class MyLayout(BoxLayout, MDApp):
         )
 
     def check_data_login(self):
+        self.ids["zbarcam"].xcamera.play = False
         self.ids["RFID"].text = ""
         self.ids['spinner'].active = True
         username = self.ids['username'].text
@@ -63,6 +67,7 @@ class MyLayout(BoxLayout, MDApp):
         print(username)
         print(password)
         self.change_screen("screen2")
+        self.login_key = True
         # if not username and not password:
         #     toast("Username and password are required")
         # elif not username:
@@ -81,16 +86,17 @@ class MyLayout(BoxLayout, MDApp):
         self.scr_mngr.current = screen
 
     def calc(self, instance):
-        print(self.ids['qrlabel'].text)
-        if self.ids['qrlabel'].text != "":
-            self.scanned  = str(self.ids['qrlabel'].text)
-            text = self.scanned.split("b")
-            self.ids["RFID"].text = str(text[1]).replace("'", "")
-            self.change_screen("screen3")
-            self.ids["zbarcam"].xcamera.play = False
-        else :
-            self.change_screen("screen6")
-            self.ids["zbarcam"].xcamera.play = True
+        if self.login_key == True:
+            print(self.ids['qrlabel'].text)
+            if self.ids['qrlabel'].text != "":
+                self.scanned = str(self.ids['qrlabel'].text)
+                text = self.scanned.split("b")
+                self.ids["RFID"].text = str(text[1]).replace("'", "")
+                self.change_screen("screen3")
+                self.ids["zbarcam"].xcamera.play = False
+            else:
+                self.change_screen("screen6")
+                self.ids["zbarcam"].xcamera.play = True
 
     def scan(self):
         self.change_screen("screen6")
@@ -130,9 +136,9 @@ class MyLayout(BoxLayout, MDApp):
         self.data_tables = MDDataTable(
             pos_hint={"center_x": 0, "center_y": 0},
             size_hint=(1, 1),
-            use_pagination=True,
+            # use_pagination=True,
             # check=True,
-            rows_num=5,
+            rows_num=1000,
             column_data=[
                 # page1
                 ("No.", dp(15)),  # 0
@@ -217,6 +223,11 @@ class MyLayout(BoxLayout, MDApp):
     def close_data_table(self, *args):
         self.ids.container.remove_widget(self.data_tables)
 
+    def insert_db(self):
+
+        query = f"insert into taginfo values ({self.ids['spinner2'].text})"
+        self.db.c.execute(query)
+        rows = self.db.c.fetchall()
 
     def file_manager_open(self):
         self.file_manager.show('/home/scientist/')  # output manager to the screen
@@ -254,10 +265,8 @@ class MyLayout(BoxLayout, MDApp):
 
         # with open("/etc/wpa_supplicant/wpa_supplicant.conf", "w") as wifi:
         #     wifi.write(self.config)
-
         print("Wifi config added")
         self.ids['spinnerwifi'].active = False
-
         subprocess.call(["sudo", "systemctl", "daemon-reload"])
         subprocess.call(["sudo", "systemctl", "restart", "dhcpcd"])
         # subprocess.call(["sudo", "dhclient", "wlan0"])
@@ -267,6 +276,7 @@ class MyLayout(BoxLayout, MDApp):
         self.ids['ip'].text = myip
 
 
+
 class DemoApp(MDApp):
     pass
 
@@ -274,4 +284,7 @@ class DemoApp(MDApp):
 if __name__ == '__main__':
     Window.show_cursor = True
     Window.size = (800, 480)
+    Window.borderless = True
+
     DemoApp().run()
+    # MyLayout().run()

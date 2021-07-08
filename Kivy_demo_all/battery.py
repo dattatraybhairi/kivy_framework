@@ -6,7 +6,7 @@ from kivy.properties import StringProperty, ObjectProperty
 from plyer import battery
 
 Builder.load_string('''  
-:
+BatteryApp:
     lbl1: lbl1
     lbl2: lbl2
     FloatLayout:
