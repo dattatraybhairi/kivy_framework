@@ -15,9 +15,10 @@ MyLayout:
                 id:spinner
                 size_hint: None, None
                 size: dp(46), dp(46)
-                pos_hint: {'center_x': .5, 'center_y': .5}
+                pos_hint: {'center_x': .5, 'center_y': .6}
                 active: False
             MDToolbar:
+                spacing:"20dp"
                 md_bg_color: 0, 0, 1, 1
                 title: "Login Screen"
                 pos_hint:{"top": 1}
@@ -29,23 +30,32 @@ MyLayout:
 
             BoxLayout:
                 orientation: "vertical"
-                padding: "16dp"
-                spacing: "16dp"
+                padding: "50dp"
+                spacing: "10dp"
                 size_hint_y: None
                 height: self.minimum_height
-                pos_hint: {"center_y": .6}
+                pos_hint: {"center_y": .79}
 
                 MDLabel:
                     text: "Log In"
                     halign: "center"
                     font_style: "H4"
                     size_hint_y: None
+
+            BoxLayout:
+                orientation: "vertical"
+                padding: "50dp"
+                spacing: "10dp"
+                size_hint_y: None
+                height: self.minimum_height
+                pos_hint: {"center_y": .60}
+
+
                 MDTextField:
                     id: username
                     hint_text: "Username "
                     helper_text_mode: "on_focus"
                     required: True
-
 
                 MDTextField:
                     id: password
@@ -54,7 +64,7 @@ MyLayout:
                     required: True
                     password: True
 
-            MDRaisedButton:
+            MDRectangleFlatButton:
                 text: "LOGIN"
                 pos_hint: {"center_x": 0.5, "center_y": 0.3}
                 on_release: root.check_data_login()
@@ -143,7 +153,7 @@ MyLayout:
                         cols:1
                         MDIconButton:
                             icon: "import"
-                            text: "Roor"
+                            text: "Root"
                             user_font_size: "140sp"
                             theme_text_color: "Custom"
                             text_color: app.theme_cls.primary_color
@@ -441,11 +451,13 @@ MyLayout:
                             user_font_size: "140sp"
                             theme_text_color: "Custom"
                             text_color: app.theme_cls.primary_color
-                            on_release: root.file_manager_open()
+                            #on_release: root.file_manager_open()
+                            on_release:  root.change_screen("screen8")
                         MDRectangleFlatButton:
                             text: "          Upload File           "
                             text_color: app.theme_cls.primary_color
-                            on_release: root.file_manager_open()
+                            #on_release: root.file_manager_open()
+                            on_release:  root.change_screen("screen8")
 
                     GridLayout:
                         pos_hint: {"center_x": 0.4, "center_y": 0.7}
@@ -532,7 +544,6 @@ MyLayout:
                         on_text: root.calc(self.text)
                         opacity: 1
 
-
         MDScreen:
             id: screen7 #wifi-config
             name: 'screen7'
@@ -557,8 +568,8 @@ MyLayout:
 
             BoxLayout:
                 orientation: "vertical"
-                padding: "25dp"
-                spacing: "25dp"
+                padding: "50dp"
+                spacing: "20dp"
                 size_hint_y: None
                 height: self.minimum_height
                 pos_hint: {"center_y": .63}
@@ -582,24 +593,107 @@ MyLayout:
                     required: True
                     password: False
 
-            MDRaisedButton:
+            MDRectangleFlatButton:
                 id:wifi_connect
                 text: "Connect"
                 #halign:"center"
-                pos_hint: {"center_x": 0.9, "center_y": 0.4}
+                pos_hint: {"center_x": 0.88, "center_y": 0.4}
                 on_release: root.connect_wifi()
 
             BoxLayout:
                 orientation: "horizontal"
-                padding: "25dp"
-                spacing: "25dp"
-                MDRaisedButton:
-                    text: "IP Address"
+                padding: "50dp"
+                spacing: "10dp"
+                MDLabel:
+                    text: "IP Address :"
                     #halign:"center"
                     pos_hint: {"center_x": 0.5, "center_y": 0.2}
 
-                MDTextField:
+                MDLabel:
                     id: ip
+                    text:"Click on connect to get IP Address"
+                    size_hint_x: 5
                     pos_hint: {"center_x": 0.5, "center_y": 0.2}
 
+################################################################################################################
 
+        MDScreen:
+            id: screen8 #sending file
+            name: 'screen8'
+            MDSpinner:
+                id:spinner_ftp
+                size_hint: None, None
+                size: dp(46), dp(46)
+                pos_hint: {'center_x': .5, 'center_y': .6}
+                active: False
+            MDToolbar:
+                md_bg_color: 0, 0, 1, 1
+                title: "Upload File to Server"
+                pos_hint:{"top": 1}
+                elevation: 5
+                spacing:"25dp"
+                MDIconButton:
+                    icon: "arrow-left-bold-circle"
+                    user_font_size: "40sp"
+                    theme_text_color: "Custom"
+                    text_color: app.theme_cls.primary_color
+                    on_release: root.change_screen("screen2")
+
+            BoxLayout:
+                orientation: "horizontal"
+                padding: "50dp"
+                spacing: "10dp"
+
+                MDLabel:
+                    #halign: "left"
+                    font_size: 16
+                    text: "IP Address :"
+                    pos_hint: {"center_x": 0.1, "center_y": 0.75}
+
+                MDTextField:
+                    size_hint_x: 5
+                    id: server_ip
+                    hint_text: "Enter server IP Here"
+                    pos_hint: {"center_x": 0.1, "center_y": 0.75}
+
+
+                MDIconButton:
+                    icon: "link"
+                    user_font_size: "40sp"
+                    theme_text_color: "Custom"
+                    text_color: app.theme_cls.primary_color
+                    pos_hint: {"center_x": 0.5, "center_y": 0.75}
+
+
+            BoxLayout:
+                orientation: "horizontal"
+                padding: "50dp"
+                spacing: "10dp"
+
+                MDLabel:
+                    #halign: "left"
+                    font_size: 16
+                    text: "Select File :"
+                    pos_hint: {"center_x": 0.1, "center_y": 0.5}
+
+                MDTextField:
+                    size_hint_x: 5
+                    hint_text: "Chose file "
+                    id: file_location
+                    pos_hint: {"center_x": 0.1, "center_y": 0.5}
+
+
+                MDIconButton:
+                    icon: "file-send"
+                    user_font_size: "40sp"
+                    theme_text_color: "Custom"
+                    text_color: app.theme_cls.primary_color
+                    pos_hint: {"center_x": 0.5, "center_y": 0.5}
+                    on_release: root.file_manager_open()
+
+            MDRectangleFlatButton:
+                pos_hint: {"center_x": 0.5, "center_y": 0.3}
+                halign:"center"
+                text: "              Upload                "
+                text_color: app.theme_cls.primary_color
+                on_release:root.upload_file()

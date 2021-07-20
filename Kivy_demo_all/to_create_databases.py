@@ -17,11 +17,34 @@ if __name__ == '__main__':
     cursror = db.cursor()
     print("cursor object is created", cursror)
 
-    sql = " CREATE TABLE IF NOT EXISTS taginfo (id INT AUTO_INCREMENT PRIMARY KEY, assettag VARCHAR(20) UNIQUE, DeviceMOdel VARCHAR(64)," \
-          "AssettUnitStage INT , RackNo VARCHAR(64), Address VARCHAR(64), DataCenter VARCHAR(64), Floor VARCHAR(64), Room VARCHAR(64)," \
-          "MacAddr1 VARCHAR(64), Description VARCHAR(100), Manufacturer VARCHAR(64), SerialNumber VARCHAR(64), Supplier VARCHAR(64), MacAddr2 VARCHAR(64)," \
-          "EquipmentCategory VARCHAR(64), Lifecycle VARCHAR(64), MaintenanceCycle VARCHAR(64), Principal VARCHAR(64), MaintanceContact VARCHAR(64), Weight INT, Power INT, Current INT," \
-          "Voltage INT, FirstUseTime DATE, IneventoryCode VARCHAR(64), LastMaintenanceStaff VARCHAR(64),NextMaintenanceStaff VARCHAR(64), LastUpdateTime VARCHAR(64)," \
+    sql = " CREATE TABLE IF NOT EXISTS demo (id INT AUTO_INCREMENT PRIMARY KEY," \
+          " assettag VARCHAR(20) UNIQUE," \
+          " DeviceMOdel VARCHAR(64)," \
+          "AssettUnitStage INT " \
+          ", RackNo VARCHAR(64), " \
+          "Address VARCHAR(64), " \
+          "DataCenter VARCHAR(64), " \
+          "Floor VARCHAR(64), " \
+          "Room VARCHAR(64)," \
+          "MacAddr1 VARCHAR(64)," \
+          " Description VARCHAR(100)," \
+          " Manufacturer VARCHAR(64)," \
+          " SerialNumber VARCHAR(64), " \
+          "Supplier VARCHAR(64), " \
+          "MacAddr2 VARCHAR(64)," \
+          "EquipmentCategory VARCHAR(64)," \
+          " Lifecycle VARCHAR(64)," \
+          " MaintenanceCycle VARCHAR(64), " \
+          "Principal VARCHAR(64)," \
+          " MaintanceContact VARCHAR(64), " \
+          "Weight INT," \
+          " Power INT, Current INT," \
+          "Voltage INT, " \
+          "FirstUseTime DATE, " \
+          "IneventoryCode VARCHAR(64), " \
+          "LastMaintenanceStaff VARCHAR(64)," \
+          "NextMaintenanceStaff VARCHAR(64), " \
+          "LastUpdateTime VARCHAR(64)," \
           "NextUpdatedTime varchar(64));"
 
     cursror.execute(sql)
