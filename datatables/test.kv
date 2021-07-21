@@ -1,0 +1,167 @@
+
+<PopupLabelCell>
+    size_hint: (None, None)
+    height: 30
+    text_size: self.size
+    halign: "left"
+    valign: "middle"
+
+<EditStatePopup>:
+    container: container
+    size_hint: None, None
+    size: 400, 275
+    title_size: 20
+    # title_font: "Verdana"
+    auto_dismiss: False
+
+    BoxLayout:
+        orientation: "vertical"
+        ScrollView:
+            bar_width: 10
+            bar_color: 1, 0, 0, 1   # red
+            bar_inactive_color: 0, 0, 1, 1   # blue
+            effect_cls: "ScrollEffect"
+            scroll_type: ['bars']
+            size_hint: (1, None)
+
+            GridLayout:
+                id: container
+                cols: 2
+                row_default_height: 30
+                cols_minimum: {0: 100, 1: 300}
+                # spacing: 10, 10
+                # padding: 20, 20
+                size_hint: (None, None)
+                height: self.minimum_height
+
+        BoxLayout:
+            Button:
+                size_hint: 1, 0.2
+                text: "Save Changes"
+                on_release:
+                    root.dismiss()
+            Button:
+                size_hint: 1, 0.2
+                text: "Cancel Changes"
+                on_release: root.dismiss()
+
+<SelectableButton>:
+    canvas.before:
+        Color:
+            rgba: (0, 0.517, 0.705, 1) if self.selected else (0, 0.517, 0.705, 1)
+        Rectangle:
+            pos: self.pos
+            size: self.size
+    background_color: [1, 0, 0, 1]  if self.selected else [1, 1, 1, 1]  # dark red else dark grey
+    on_press: app.root.table.rv.on_mouse_select(self)
+
+<HeaderCell>
+    size_hint: (None, None)
+    height: 25
+    text_size: self.size
+    halign: "left"
+    valign: "middle"
+    background_disabled_normal: ''
+    disabled_color: (1, 1, 1, 1)
+
+    canvas.before:
+        Color:
+            rgba: 1, 0.502, 0, 1
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+<TableHeader>:
+    header: header
+    bar_width: 0
+    do_scroll: False
+    size_hint: (1, None)
+    height: 25
+    effect_cls: "ScrollEffect"
+
+    GridLayout:
+        id: header
+        rows: 1
+        cols_minimum: root.cols_minimum
+        size_hint: (None, None)
+        width: self.minimum_width
+        height: self.minimum_height
+
+<RV>:
+    row_controller: row_controller
+
+    bar_width: 10
+    bar_color: 1, 0, 0, 1   # red
+    bar_inactive_color: 0, 0, 1, 1   # blue
+    effect_cls: "ScrollEffect"
+    scroll_type: ['bars']
+
+    data: root.rv_data
+    viewclass: 'SelectableButton'
+
+    SelectableRecycleGridLayout:
+        id: row_controller
+        key_selection: 'selectable'
+        cols: root.total_col_headings
+        cols_minimum: root.cols_minimum
+        default_size: None, dp(26)
+        default_size_hint: 1, None
+        size_hint: None, None
+        height: self.minimum_height
+        width: self.minimum_width
+        orientation: 'vertical'
+        multiselect: True
+        touch_multiselect: True
+
+
+<MenuButton@Button>:
+    text_size: self.size
+    valign: "middle"
+    padding_x: 5
+    size : (80,30)
+    size_hint : (None, None)
+    background_color: 90 , 90, 90, 90
+    background_normal: ''
+    color: 0, 0.517, 0.705, 1
+    border: (0, 10, 0, 0)
+
+
+<MainMenu>:
+    states_cities_or_areas: states_cities_or_areas
+
+    BoxLayout:
+        orientation: 'vertical'
+
+        BoxLayout:
+            canvas.before:
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+
+            size_hint_y: 1
+
+            MenuButton:
+                id: btn
+                text: 'Test'
+                size : (60,30)
+                on_release: root.display_states()
+
+
+        BoxLayout:
+            canvas.before:
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+
+                Color:
+                    rgb: (1,1,1)
+
+            Label:
+                size_hint_x: 45
+
+        BoxLayout:
+            id: states_cities_or_areas
+            size_hint_y: 10
+
+        Label:
+            size_hint_y: 1

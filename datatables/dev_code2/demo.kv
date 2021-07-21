@@ -1,0 +1,956 @@
+#:import utils kivy.utils
+#:import ZBarCam kivy_garden.zbarcam.ZBarCam
+#:import ZBarSymbol pyzbar.pyzbar.ZBarSymbol
+#:import QRCodeWidget kivy_garden.qrcode
+
+
+<ListItemWithCheckbox>:
+
+    IconLeftWidget:
+        spacing :"25dp "
+        icon: root.icon
+        user_font_size: "30sp"
+        theme_text_color: "Custom"
+        text_color: app.theme_cls.primary_color
+
+MyLayout:
+    scr_mngr: scr_mngr
+    orientation: 'vertical'
+    ScreenManager:
+        id: scr_mngr
+        Screen:
+            id: screen1
+            name: 'screen1'
+            MDSpinner:
+                id:spinner
+                size_hint: None, None
+                size: dp(46), dp(46)
+                pos_hint: {'center_x': .5, 'center_y': .6}
+                active: False
+            MDToolbar:
+                spacing:"20dp"
+                md_bg_color: 0, 0, 1, 1
+                title: "Login Screen"
+                pos_hint:{"top": 1}
+                elevation: 11
+                MDIconButton:
+                    icon: "power"
+                    user_font_size: "40sp"
+                    on_release: root.sleep()
+
+            BoxLayout:
+                orientation: "vertical"
+                padding: "50dp"
+                spacing: "10dp"
+                size_hint_y: None
+                height: self.minimum_height
+                pos_hint: {"center_y": .79}
+
+                MDLabel:
+                    text: "Log In"
+                    halign: "center"
+                    font_style: "H4"
+                    size_hint_y: None
+
+            BoxLayout:
+                orientation: "vertical"
+                padding: "50dp"
+                spacing: "10dp"
+                size_hint_y: None
+                height: self.minimum_height
+                pos_hint: {"center_y": .60}
+
+
+                MDTextField:
+                    id: username
+                    hint_text: "Username "
+                    helper_text_mode: "on_focus"
+                    required: True
+
+                MDTextField:
+                    id: password
+                    hint_text: "Password "
+                    helper_text_mode: "on_focus"
+                    required: True
+                    password: True
+
+            MDRectangleFlatButton:
+                text: "LOGIN"
+                pos_hint: {"center_x": 0.5, "center_y": 0.3}
+                on_release: root.check_data_login()
+
+#oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
+
+        Screen:
+            id: screen2
+            name: 'screen2'
+
+            BoxLayout:
+                orientation: 'vertical'
+                MDToolbar:
+                    md_bg_color: 0, 0, 1, 1
+                    id: toolbar
+                    title: "Server Registration Window"
+                    pos_hint:{"top": 1}
+                    spacing:"20dp"
+                    #padding:"20dp"
+                    MDIconButton:
+                        icon: "wifi-cog"
+                        user_font_size: "40sp"
+                        theme_text_color: "Custom"
+                        text_color: app.theme_cls.primary_color
+                        on_release: root.change_screen("screen7")
+
+                    MDRaisedButton:
+                        text: "Logout"
+                        pos_hint: {"center_x": 0.1, "center_y": 0.5}
+                        on_release: root.show_alert_dialog()
+
+
+
+
+                BoxLayout:
+                    orientation: 'horizontal'
+                    padding: "20dp"
+                    spacing: "20dp"
+                    pos_hint: {"center_x": 0.55, "center_y": 0.8}
+
+                    GridLayout:
+                        #orientation: "horizontal"
+                        pos_hint: {"center_x": 0.5, "center_y": 0.7}
+                        size_hint_y: None
+                        cols:1
+                        MDIconButton:
+                            icon: "file-document-edit"
+                            user_font_size: "140sp"
+                            theme_text_color: "Custom"
+                            text_color: app.theme_cls.primary_color
+                            on_release:root.change_screen("screen3")
+                        MDRectangleFlatButton:
+                            text: "         Register New           "
+                            text_color: app.theme_cls.primary_color
+                            on_release:root.change_screen("screen3")
+
+                    GridLayout:
+                        pos_hint: {"center_x": 0.4, "center_y": 0.7}
+                        #orientation: "horizontal"
+                        size_hint_y: None
+                        cols:1
+                        MDIconButton:
+                            icon: "database-check"
+                            text: "Roor"
+                            user_font_size: "140sp"
+                            theme_text_color: "Custom"
+                            text_color: app.theme_cls.primary_color
+                            on_release:root.change_screen("screen5")
+                            on_release:root.open_data_table()
+
+                        MDRectangleFlatButton:
+                            text: "             Database                "
+                            text_color: app.theme_cls.primary_color
+                            on_release:root.change_screen("screen5")
+                            on_release:root.open_data_table()
+                        MDSpinner:
+                            id:spinner2
+                            size_hint: None, None
+                            size: dp(46), dp(46)
+                            pos_hint: {'center_x': .5, 'center_y': .5}
+                            active: False
+
+                    GridLayout:
+                        pos_hint: {"center_x": 0.4, "center_y": 0.7}
+                        size_hint_y: None
+                        cols:1
+                        MDIconButton:
+                            icon: "import"
+                            text: "Root"
+                            user_font_size: "140sp"
+                            theme_text_color: "Custom"
+                            text_color: app.theme_cls.primary_color
+                            on_release:root.change_screen("screen4")
+                        MDRectangleFlatButton:
+                            text: "              Export                "
+                            text_color: app.theme_cls.primary_color
+                            on_release:root.change_screen("screen4")
+
+
+#00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+
+        Screen:
+            id: screen3
+            name: 'screen3'
+            BoxLayout:
+                orientation: 'vertical'
+                MDToolbar:
+                    md_bg_color: 0, 0, 1, 1
+                    id: toolbar
+                    title: "Register"
+                    pos_hint:{"top": 1}
+                    spacing:"20dp"
+                    MDIconButton:
+                        icon: "arrow-left-bold-circle"
+                        user_font_size: "40sp"
+                        theme_text_color: "Custom"
+                        text_color: app.theme_cls.primary_color
+                        on_release: root.change_screen("screen2")
+
+                    MDIconButton:
+                        icon: "content-save-outline"
+                        user_font_size: "40sp"
+                        theme_text_color: "Custom"
+                        text_color: app.theme_cls.primary_color
+                        on_release: root.change_screen("screen2")
+
+                MDTabs:
+                    Tab:
+                        text: "Basic Info"
+                        ScrollView:
+                            #size_hint_y : None
+                            pos_hint:{'x':0,'y':0}
+                            do_scroll_x: False
+                            do_scroll_y: True
+                            GridLayout:
+                                #orientation: "vertical"
+                                size_hint_y: None
+                                #height: self.minimum_height  #<<<<<<<<<<<<<<<<<<<<
+                                height: self.minimum_height  #<<<<<<<<<<<<<<<<<<<<
+                                row_default_height: 10
+                                cols:2
+                                padding: "32dp"
+                                spacing: "32dp"
+
+                                BoxLayout:
+                                    orientation: 'horizontal'
+                                    MDTextField:
+                                        id: RFID
+                                        hint_text: "RFID Physical No"
+                                        helper_text_mode: "on_focus"
+                                        required: True
+                                    MDIconButton:
+                                        id: "scan_button"
+                                        icon: "data-matrix-scan"
+                                        user_font_size: "40sp"
+                                        theme_text_color: "Custom"
+                                        text_color: app.theme_cls.primary_color
+                                        on_release: root.scan()
+
+                                MDTextField:
+                                    id: AssetSN
+                                    hint_text: " Asset SN "
+                                    helper_text_mode: "on_focus"
+                                    required: True
+                                MDTextField:
+                                    id: DataCenter
+                                    hint_text: "Data Center "
+                                    helper_text_mode: "on_focus"
+                                    required: True
+                                MDTextField:
+                                    id: Description
+                                    hint_text: " Description "
+                                    helper_text_mode: "on_focus"
+                                    required: True
+                                MDTextField:
+                                    id: DeviceModel
+                                    hint_text: " Device Model "
+                                    helper_text_mode: "on_focus"
+                                    required: True
+                                MDTextField:
+                                    id: Floor
+                                    hint_text: " Floor "
+                                    helper_text_mode: "on_focus"
+                                    required: True
+
+                                MDTextField:
+                                    id: Manufacturer
+                                    hint_text: " Manufacturer "
+                                    helper_text_mode: "on_focus"
+                                    required: True
+
+                                MDTextField:
+                                    id: AssetUnitUsage
+                                    hint_text: " Asset Unit Usage "
+                                    helper_text_mode: "on_focus"
+                                    required: True
+
+                                MDTextField:
+                                    id: Room
+                                    hint_text: " Room "
+                                    helper_text_mode: "on_focus"
+                                    required: True
+
+                                MDTextField:
+                                    id: SerialNumber
+                                    hint_text: " Serial Number "
+                                    helper_text_mode: "on_focus"
+                                    required: True
+
+                                MDTextField:
+                                    id: RackNo
+                                    hint_text: " Rack No "
+                                    helper_text_mode: "on_focus"
+                                    required: True
+
+                                MDTextField:
+                                    id: Column
+                                    hint_text: " Column "
+                                    helper_text_mode: "on_focus"
+                                    required: True
+
+                                MDTextField:
+                                    id: Supplier
+                                    hint_text: " Supplier "
+                                    helper_text_mode: "on_focus"
+                                    required: True
+
+                                MDTextField:
+                                    id: Address
+                                    hint_text: " Address "
+                                    helper_text_mode: "on_focus"
+                                    required: True
+
+                                MDTextField:
+                                    id: MacAddress1
+                                    hint_text: " MAC Address1 "
+                                    helper_text_mode: "on_focus"
+                                    required: True
+                                MDTextField:
+                                    id: MacAddress2
+                                    hint_text: " MAC Address2 "
+                                    helper_text_mode: "on_focus"
+                                    required: True
+                                BoxLayout:
+                                    orientation: 'vertical'
+                                BoxLayout:
+                                    orientation: 'vertical'
+
+
+                    Tab:
+                        text: "Pro Info"
+                        ScrollView:
+                            GridLayout:
+                                #orientation: "vertical"
+                                size_hint_y: None
+                                #height: self.minimum_height  #<<<<<<<<<<<<<<<<<<<<
+                                height: self.minimum_height  #<<<<<<<<<<<<<<<<<<<<
+                                row_default_height: 10
+                                cols:2
+                                padding: "32dp"
+                                spacing: "32dp"
+                                MDTextField:
+                                    id: EquipmentCategory
+                                    hint_text: "Equipment Category"
+                                    helper_text_mode: "on_focus"
+                                    required: True
+                                MDTextField:
+                                    id: Weight
+                                    hint_text: " Weight(KG) "
+                                    helper_text_mode: "on_focus"
+                                    required: True
+                                MDTextField:
+                                    id: InventoryCode
+                                    hint_text: " Inventory Code "
+                                    helper_text_mode: "on_focus"
+                                    required: True
+                                MDTextField:
+                                    id: LifeCycle
+                                    hint_text: " Life Cycle "
+                                    helper_text_mode: "on_focus"
+                                    required: True
+                                MDTextField:
+                                    id: Power
+                                    hint_text: " Power(W) "
+                                    helper_text_mode: "on_focus"
+                                    required: True
+                                MDTextField:
+                                    id: LastMaintenanceStaff
+                                    hint_text: " Last Maintenance Staff "
+                                    helper_text_mode: "on_focus"
+                                    required: True
+
+                                MDTextField:
+                                    id: MaintenanceCycle
+                                    hint_text: " Maintenance Cycle "
+                                    helper_text_mode: "on_focus"
+                                    required: True
+
+                                MDTextField:
+                                    id: Current
+                                    hint_text: " Current(A) "
+                                    helper_text_mode: "on_focus"
+                                    required: True
+
+                                MDTextField:
+                                    id: NextMaintenanceStaff
+                                    hint_text: " Next Maintenance Staff "
+                                    helper_text_mode: "on_focus"
+                                    required: True
+
+                                MDTextField:
+                                    id: Principal
+                                    hint_text: " Principal "
+                                    helper_text_mode: "on_focus"
+                                    required: True
+
+                                MDTextField:
+                                    id: Voltage
+                                    hint_text: " Voltage(V) "
+                                    helper_text_mode: "on_focus"
+                                    required: True
+
+                                MDTextField:
+                                    id: LastUpdatedTime
+                                    hint_text: " Last Updated Time "
+                                    helper_text_mode: "on_focus"
+                                    required: True
+
+                                MDTextField:
+                                    id: MaintenanceContact
+                                    hint_text: " MaintenanceContact "
+                                    helper_text_mode: "on_focus"
+                                    required: True
+
+                                MDTextField:
+                                    id: FirstUseTime
+                                    hint_text: " First Use Time "
+                                    helper_text_mode: "on_focus"
+                                    required: True
+
+                                MDTextField:
+                                    id: NextUpdateTime
+                                    hint_text: " Next Update Time "
+                                    helper_text_mode: "on_focus"
+                                    required: True
+
+
+#000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+        Screen: #export
+            id: screen4
+            name: 'screen4'
+            #database
+            BoxLayout:
+                orientation: 'vertical'
+                MDToolbar:
+                    md_bg_color: 0, 0, 1, 1
+                    id: toolbar
+                    title: "Export"
+                    pos_hint:{"top": 1}
+                    spacing:"20dp"
+
+                    MDIconButton:
+                        icon: "arrow-left-bold-circle"
+                        user_font_size: "40sp"
+                        theme_text_color: "Custom"
+                        text_color: app.theme_cls.primary_color
+                        on_release: root.change_screen("screen2")
+
+
+                BoxLayout:
+                    orientation: 'horizontal'
+                    padding: "40dp"
+                    spacing: "15dp"
+                    pos_hint: {"center_x": 0.61, "center_y": 0.8}
+
+                    GridLayout:
+                        pos_hint: {"center_x": 0.1, "center_y": 0.7}
+                        #orientation: "horizontal"
+                        size_hint_y: None
+                        cols:1
+                        MDIconButton:
+                            icon: "cloud-upload"
+                            text: "Roor"
+                            user_font_size: "140sp"
+                            theme_text_color: "Custom"
+                            text_color: app.theme_cls.primary_color
+                            #on_release: root.file_manager_open()
+                            on_release:  root.change_screen("screen8")
+                        MDRectangleFlatButton:
+                            text: "          Upload File           "
+                            text_color: app.theme_cls.primary_color
+                            #on_release: root.file_manager_open()
+                            on_release:  root.change_screen("screen8")
+
+                    GridLayout:
+                        pos_hint: {"center_x": 0.4, "center_y": 0.7}
+                        size_hint_y: None
+                        cols:1
+                        MDIconButton:
+                            icon: "database-remove"
+                            text: "Roor"
+                            user_font_size: "140sp"
+                            theme_text_color: "Custom"
+                            text_color: app.theme_cls.primary_color
+                            #on_release: root.change_screen("screen2")
+                        MDRectangleFlatButton:
+                            text: "          Delete Database        "
+                            text_color: app.theme_cls.primary_color
+
+
+
+#000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+        MDScreen:
+            id: screen5
+            name: 'screen5'
+            #export
+            BoxLayout:
+                orientation: 'vertical'
+                MDToolbar:
+                    md_bg_color: 0, 0, 1, 1
+                    id: toolbar
+                    title: "DataBase"
+                    spacing:"20dp"
+
+                    MDIconButton:
+                        icon: "arrow-left-bold-circle"
+                        user_font_size: "40sp"
+                        theme_text_color: "Custom"
+                        text_color: app.theme_cls.primary_color
+                        on_release: root.change_screen("screen2")
+
+                ScrollView:
+                    MDList:
+                        spacing:"1dp"
+                        padding:"1dp"
+                        id: container
+#000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+        MDScreen:
+            id: screen6
+            name: 'screen6'
+            #export
+            BoxLayout:
+                orientation: 'vertical'
+                MDToolbar:
+                    md_bg_color: 0, 0, 1, 1
+                    id: toolbar
+                    title: "Scanning Bar-Code/QR Code"
+                    pos_hint:{"top": 1}
+                    spacing:"20dp"
+
+                    MDIconButton:
+                        icon: "arrow-left-bold-circle"
+                        user_font_size: "40sp"
+                        theme_text_color: "Custom"
+                        text_color: app.theme_cls.primary_color
+                        on_release: root.change_screen("screen3")
+
+
+                BoxLayout:
+                    orientation: 'vertical'
+                    ZBarCam:
+                        id: zbarcam
+                        # optional, by default checks all types
+                        code_types: ZBarSymbol.QRCODE, ZBarSymbol.EAN13,ZBarSymbol.CODE128
+                        #code_types: ZBarSymbol.QRCODE, ZBarSymbol.EAN13
+                        pos_hint: {'center_x': 0.5, 'center_y': 0.75}
+                        size_hint: [20, 15]
+
+                    MDLabel:
+                        id: qrlabel
+                        #size_hint: None, None
+                        size: self.texture_size[0],10
+                        pos_hint: {'center_x': 0.5, 'center_y': 0.1}
+                        halign: "center"
+                        text: ', '.join([str(symbol.data) for symbol in zbarcam.symbols])
+                        #text: 'rescan'
+                        on_text: root.calc(self.text)
+                        opacity: 1
+
+        MDScreen:
+            id: screen7 #wifi-config
+            name: 'screen7'
+            MDSpinner:
+                id:spinnerwifi
+                size_hint: None, None
+                size: dp(46), dp(46)
+                pos_hint: {'center_x': .5, 'center_y': .5}
+                active: False
+            MDToolbar:
+                md_bg_color: 0, 0, 1, 1
+                title: "WIFI Configuration"
+                pos_hint:{"top": 1}
+                elevation: 11
+                spacing:"20dp"
+                MDIconButton:
+                    icon: "arrow-left-bold-circle"
+                    user_font_size: "40sp"
+                    theme_text_color: "Custom"
+                    text_color: app.theme_cls.primary_color
+                    on_release: root.change_screen("screen2")
+
+            BoxLayout:
+                orientation: "vertical"
+                padding: "50dp"
+                spacing: "20dp"
+                size_hint_y: None
+                height: self.minimum_height
+                pos_hint: {"center_y": .63}
+
+                MDLabel:
+                    text: "Enter WIFI Credentials"
+                    halign: "left"
+                    font_size: 16
+                    #font_style: "H2"
+                    #size_hint_y:
+                MDTextField:
+                    id: ssid
+                    hint_text: "SSID "
+                    helper_text_mode: "on_focus"
+                    required: True
+
+                MDTextField:
+                    id: passkey
+                    hint_text: "Password "
+                    helper_text_mode: "on_focus"
+                    required: True
+                    password: False
+
+            MDRectangleFlatButton:
+                id:wifi_connect
+                text: "Connect"
+                #halign:"center"
+                pos_hint: {"center_x": 0.88, "center_y": 0.4}
+                on_release: root.connect_wifi()
+
+            BoxLayout:
+                orientation: "horizontal"
+                padding: "50dp"
+                spacing: "10dp"
+                MDLabel:
+                    text: "IP Address :"
+                    #halign:"center"
+                    pos_hint: {"center_x": 0.5, "center_y": 0.2}
+
+                MDLabel:
+                    id: ip
+                    text:"Click on connect to get IP Address"
+                    size_hint_x: 5
+                    pos_hint: {"center_x": 0.5, "center_y": 0.2}
+
+################################################################################################################
+
+        MDScreen:
+            id: screen8 #sending file
+            name: 'screen8'
+            MDSpinner:
+                id:spinner_ftp
+                size_hint: None, None
+                size: dp(46), dp(46)
+                pos_hint: {'center_x': .5, 'center_y': .6}
+                active: False
+            MDToolbar:
+                md_bg_color: 0, 0, 1, 1
+                title: "Upload File to Server"
+                pos_hint:{"top": 1}
+                elevation: 5
+                spacing:"25dp"
+                MDIconButton:
+                    icon: "arrow-left-bold-circle"
+                    user_font_size: "40sp"
+                    theme_text_color: "Custom"
+                    text_color: app.theme_cls.primary_color
+                    on_release: root.change_screen("screen2")
+
+            BoxLayout:
+                orientation: "horizontal"
+                padding: "50dp"
+                spacing: "10dp"
+
+                MDLabel:
+                    #halign: "left"
+                    font_size: 16
+                    text: "IP Address :"
+                    pos_hint: {"center_x": 0.1, "center_y": 0.75}
+
+                MDTextField:
+                    size_hint_x: 5
+                    id: server_ip
+                    hint_text: "Enter server IP Here"
+                    pos_hint: {"center_x": 0.1, "center_y": 0.75}
+
+
+                MDIconButton:
+                    icon: "link"
+                    user_font_size: "40sp"
+                    theme_text_color: "Custom"
+                    text_color: app.theme_cls.primary_color
+                    pos_hint: {"center_x": 0.5, "center_y": 0.75}
+
+
+            BoxLayout:
+                orientation: "horizontal"
+                padding: "50dp"
+                spacing: "10dp"
+
+                MDLabel:
+                    #halign: "left"
+                    font_size: 16
+                    text: "Select File :"
+                    pos_hint: {"center_x": 0.1, "center_y": 0.5}
+
+                MDTextField:
+                    size_hint_x: 5
+                    hint_text: "Chose file "
+                    id: file_location
+                    pos_hint: {"center_x": 0.1, "center_y": 0.5}
+
+
+                MDIconButton:
+                    icon: "file-send"
+                    user_font_size: "40sp"
+                    theme_text_color: "Custom"
+                    text_color: app.theme_cls.primary_color
+                    pos_hint: {"center_x": 0.5, "center_y": 0.5}
+                    on_release: root.file_manager_open()
+
+            MDRectangleFlatButton:
+                pos_hint: {"center_x": 0.5, "center_y": 0.3}
+                halign:"center"
+                text: "              Upload                "
+                text_color: app.theme_cls.primary_color
+                on_release:root.upload_file()
+
+###################################################################################
+        Screen:
+            id: screen9 #update the table
+            name: 'screen9'
+            BoxLayout:
+                orientation: 'vertical'
+                MDToolbar:
+                    md_bg_color: 0, 0, 1, 1
+                    id: toolbar
+                    title: "Update entry"
+                    pos_hint:{"top": 1}
+                    spacing:"20dp"
+                    MDIconButton:
+                        icon: "arrow-left-bold-circle"
+                        user_font_size: "40sp"
+                        theme_text_color: "Custom"
+                        text_color: app.theme_cls.primary_color
+                        on_release: root.change_screen("screen5")
+
+                    MDIconButton:
+                        icon: "content-save-outline"
+                        user_font_size: "40sp"
+                        theme_text_color: "Custom"
+                        text_color: app.theme_cls.primary_color
+                        on_release: root.change_screen("screen5")
+
+                MDTabs:
+                    Tab:
+                        text: "Basic Info"
+                        ScrollView:
+                            #size_hint_y : None
+                            pos_hint:{'x':0,'y':0}
+                            do_scroll_x: False
+                            do_scroll_y: True
+                            GridLayout:
+                                #orientation: "vertical"
+                                size_hint_y: None
+                                #height: self.minimum_height  #<<<<<<<<<<<<<<<<<<<<
+                                height: self.minimum_height  #<<<<<<<<<<<<<<<<<<<<
+                                row_default_height: 10
+                                cols:2
+                                padding: "32dp"
+                                spacing: "32dp"
+
+                                BoxLayout:
+                                    orientation: 'horizontal'
+                                    MDTextField:
+                                        id: RFID1
+                                        hint_text: "RFID Physical No"
+                                        helper_text_mode: "on_focus"
+                                        required: True
+                                    MDIconButton:
+                                        id: "scan_button2"
+                                        icon: "data-matrix-scan"
+                                        user_font_size: "40sp"
+                                        theme_text_color: "Custom"
+                                        text_color: app.theme_cls.primary_color
+                                        on_release: root.scan()
+
+                                MDTextField:
+                                    id: AssetSN2
+                                    hint_text: " Asset SN "
+                                    helper_text_mode: "on_focus"
+                                    required: True
+                                MDTextField:
+                                    id: DataCenter2
+                                    hint_text: "Data Center "
+                                    helper_text_mode: "on_focus"
+                                    required: True
+                                MDTextField:
+                                    id: Description2
+                                    hint_text: " Description "
+                                    helper_text_mode: "on_focus"
+                                    required: True
+                                MDTextField:
+                                    id: DeviceModel2
+                                    hint_text: " Device Model "
+                                    helper_text_mode: "on_focus"
+                                    required: True
+                                MDTextField:
+                                    id: Floor2
+                                    hint_text: " Floor "
+                                    helper_text_mode: "on_focus"
+                                    required: True
+
+                                MDTextField:
+                                    id: Manufacturer2
+                                    hint_text: " Manufacturer "
+                                    helper_text_mode: "on_focus"
+                                    required: True
+
+                                MDTextField:
+                                    id: AssetUnitUsage2
+                                    hint_text: " Asset Unit Usage "
+                                    helper_text_mode: "on_focus"
+                                    required: True
+
+                                MDTextField:
+                                    id: Room2
+                                    hint_text: " Room "
+                                    helper_text_mode: "on_focus"
+                                    required: True
+
+                                MDTextField:
+                                    id: SerialNumber2
+                                    hint_text: " Serial Number "
+                                    helper_text_mode: "on_focus"
+                                    required: True
+
+                                MDTextField:
+                                    id: RackNo2
+                                    hint_text: " Rack No "
+                                    helper_text_mode: "on_focus"
+                                    required: True
+
+                                MDTextField:
+                                    id: Column2
+                                    hint_text: " Column "
+                                    helper_text_mode: "on_focus"
+                                    required: True
+
+                                MDTextField:
+                                    id: Supplier2
+                                    hint_text: " Supplier "
+                                    helper_text_mode: "on_focus"
+                                    required: True
+
+                                MDTextField:
+                                    id: Address2
+                                    hint_text: " Address "
+                                    helper_text_mode: "on_focus"
+                                    required: True
+
+                                MDTextField:
+                                    id: MacAddress12
+                                    hint_text: " MAC Address1 "
+                                    helper_text_mode: "on_focus"
+                                    required: True
+                                MDTextField:
+                                    id: MacAddress22
+                                    hint_text: " MAC Address2 "
+                                    helper_text_mode: "on_focus"
+                                    required: True
+                                BoxLayout:
+                                    orientation: 'vertical'
+                                BoxLayout:
+                                    orientation: 'vertical'
+
+
+                    Tab:
+                        text: "Pro Info"
+                        ScrollView:
+                            GridLayout:
+                                #orientation: "vertical"
+                                size_hint_y: None
+                                #height: self.minimum_height  #<<<<<<<<<<<<<<<<<<<<
+                                height: self.minimum_height  #<<<<<<<<<<<<<<<<<<<<
+                                row_default_height: 10
+                                cols:2
+                                padding: "32dp"
+                                spacing: "32dp"
+                                MDTextField:
+                                    id: EquipmentCategory2
+                                    hint_text: "Equipment Category"
+                                    helper_text_mode: "on_focus"
+                                    required: True
+                                MDTextField:
+                                    id: Weight2
+                                    hint_text: " Weight(KG) "
+                                    helper_text_mode: "on_focus"
+                                    required: True
+                                MDTextField:
+                                    id: InventoryCode2
+                                    hint_text: " Inventory Code "
+                                    helper_text_mode: "on_focus"
+                                    required: True
+                                MDTextField:
+                                    id: LifeCycle2
+                                    hint_text: " Life Cycle "
+                                    helper_text_mode: "on_focus"
+                                    required: True
+                                MDTextField:
+                                    id: Power2
+                                    hint_text: " Power(W) "
+                                    helper_text_mode: "on_focus"
+                                    required: True
+                                MDTextField:
+                                    id: LastMaintenanceStaff2
+                                    hint_text: " Last Maintenance Staff "
+                                    helper_text_mode: "on_focus"
+                                    required: True
+
+                                MDTextField:
+                                    id: MaintenanceCycle2
+                                    hint_text: " Maintenance Cycle "
+                                    helper_text_mode: "on_focus"
+                                    required: True
+
+                                MDTextField:
+                                    id: Current2
+                                    hint_text: " Current(A) "
+                                    helper_text_mode: "on_focus"
+                                    required: True
+
+                                MDTextField:
+                                    id: NextMaintenanceStaff2
+                                    hint_text: " Next Maintenance Staff "
+                                    helper_text_mode: "on_focus"
+                                    required: True
+
+                                MDTextField:
+                                    id: Principal2
+                                    hint_text: " Principal "
+                                    helper_text_mode: "on_focus"
+                                    required: True
+
+                                MDTextField:
+                                    id: Voltage2
+                                    hint_text: " Voltage(V) "
+                                    helper_text_mode: "on_focus"
+                                    required: True
+
+                                MDTextField:
+                                    id: LastUpdatedTime2
+                                    hint_text: " Last Updated Time "
+                                    helper_text_mode: "on_focus"
+                                    required: True
+
+                                MDTextField:
+                                    id: MaintenanceContact2
+                                    hint_text: " MaintenanceContact "
+                                    helper_text_mode: "on_focus"
+                                    required: True
+
+                                MDTextField:
+                                    id: FirstUseTime2
+                                    hint_text: " First Use Time "
+                                    helper_text_mode: "on_focus"
+                                    required: True
+
+                                MDTextField:
+                                    id: NextUpdateTime2
+                                    hint_text: " Next Update Time "
+                                    helper_text_mode: "on_focus"
+                                    required: True
+

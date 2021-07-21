@@ -2,7 +2,6 @@
 <project version="4">
   <component name="VcsDirectoryMappings">
     <mapping directory="$PROJECT_DIR$" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/garden.cefpython" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/kivy-designer" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/garden.swipetodelete" vcs="Git" />
   </component>
 </project>
