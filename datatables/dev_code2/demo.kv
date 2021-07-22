@@ -233,6 +233,13 @@ MyLayout:
                                         theme_text_color: "Custom"
                                         text_color: app.theme_cls.primary_color
                                         on_release: root.scan()
+                                    MDIconButton:
+                                        id: "nfc_tag"
+                                        icon: "credit-card-wireless"
+                                        user_font_size: "50sp"
+                                        theme_text_color: "Custom"
+                                        text_color: app.theme_cls.primary_color
+                                        on_release: root.change_screen("screen10")
 
                                 MDTextField:
                                     id: AssetSN
@@ -505,6 +512,7 @@ MyLayout:
                         theme_text_color: "Custom"
                         text_color: app.theme_cls.primary_color
                         on_release: root.change_screen("screen2")
+                        on_release:root.cleardatabase()
 
                 ScrollView:
                     MDList:
@@ -767,6 +775,7 @@ MyLayout:
                                         text_color: app.theme_cls.primary_color
                                         on_release: root.scan()
 
+
                                 MDTextField:
                                     id: AssetSN2
                                     hint_text: " Asset SN "
@@ -954,3 +963,31 @@ MyLayout:
                                     helper_text_mode: "on_focus"
                                     required: True
 
+#000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+        MDScreen:
+            id: screen10
+            name: 'screen10'
+            #read NFC tag
+            BoxLayout:
+                orientation: 'vertical'
+                MDToolbar:
+                    md_bg_color: 0, 0, 1, 1
+                    id: toolbar
+                    title: "Reading NFC Tag"
+                    spacing:"20dp"
+
+                    MDIconButton:
+                        icon: "arrow-left-bold-circle"
+                        user_font_size: "40sp"
+                        theme_text_color: "Custom"
+                        text_color: app.theme_cls.primary_color
+                        on_release: root.change_screen("screen3")
+
+                Video:
+                    source: 'nfc.gif'
+                    center: self.parent.center
+                    size: 500, 500
+                    allow_stretch: True
+                    anim_delay: 0.02
+                    mipmap: False
+                    #anim_loop: 1

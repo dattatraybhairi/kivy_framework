@@ -22,7 +22,6 @@ from kivymd.uix.button import MDFlatButton
 from kivymd.uix.dialog import MDDialog
 import os
 
-
 login_key = False
 Config.set('kivy', 'keyboard_mode', 'dock')
 loop = asyncio.get_event_loop()
@@ -39,6 +38,7 @@ class DbCon:
         self.row = self.c.fetchall()
         print(self.row)
         self.c.close()
+        self.db.close()
         return self.row
 
 
@@ -57,8 +57,6 @@ class MyLayout(BoxLayout, MDApp):
     fileError = None
     wifi = None
     cam_error = None
-    db = DbCon()
-    rows = db.get_rows()
 
     # theme_cls = ThemeManager()
     def __init__(self, **kwargs):
@@ -79,6 +77,7 @@ class MyLayout(BoxLayout, MDApp):
 
     def check_data_login(self):
         self.ids["zbarcam"].xcamera.play = False
+
         self.ids["RFID"].text = ""
         # self.ids['spinner'].active = True
         username = self.ids['username'].text
@@ -145,22 +144,32 @@ class MyLayout(BoxLayout, MDApp):
     def logout(self):
         self.dialog.dismiss()
         self.change_screen("screen1")
+        # self.ids.container.
 
     def open_data_table(self):
         if not self.database_key:
+            self.db = DbCon()
+            self.rows = self.db.get_rows()
             self.database_key = True
+            count = 0
             for i in self.rows:
+                count = count + 1
                 self.ids.container.add_widget(
-                    ListItemWithCheckbox(text=f"{i[0]}",
+                    ListItemWithCheckbox(text=f"{count}",
                                          on_release=self.click,
-                                         secondary_text=f"{i[1]}",
+                                         secondary_text=f"{i[1]},{i[2]},{i[3]},{i[4]},{i[6]} ",
                                          )
                 )
         else:
+            # ListItemWithCheckbox.clear_widgets(self.ids.container)
             print("Already Loaded")
 
+    def cleardatabase(self):
+        self.database_key = False
+        ListItemWithCheckbox.clear_widgets(self.ids.container)
+
     def click(self, ListItemWithCheckbox):
-        # print(str(ListItemWithCheckbox.text))
+        print(str(ListItemWithCheckbox.text))
         print(self.rows[int(ListItemWithCheckbox.text) - 1])
         self.ids.RFID1.text = self.rows[int(ListItemWithCheckbox.text) - 1][1]
         self.ids.AssetSN2.text = self.rows[int(ListItemWithCheckbox.text) - 1][2]
