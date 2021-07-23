@@ -1,20 +1,15 @@
 #!/usr/bin/env python
 import socket
 import asyncio
-
+from MySQLdb import IntegrityError
 from kivy.config import Config
-
 from kivy.properties import StringProperty
-
 from kivymd.toast import toast
 from kivymd.uix.filemanager import MDFileManager
-
 import MySQLdb
 from kivy.uix.boxlayout import BoxLayout
-
 from kivy.core.window import Window
-from kivymd.uix.list import OneLineListItem, TwoLineIconListItem, OneLineAvatarIconListItem, IRightBodyTouch, \
-    TwoLineAvatarIconListItem, ThreeLineAvatarIconListItem
+from kivymd.uix.list import TwoLineIconListItem
 from kivymd.uix.tab import MDTabsBase
 from kivy.uix.floatlayout import FloatLayout
 from kivymd.app import MDApp
@@ -34,12 +29,16 @@ class DbCon:
         self.c = self.db.cursor()
 
     def get_rows(self):
-        self.c.execute("SELECT * FROM taginfo")
+        self.c.execute("SELECT * FROM demo")
         self.row = self.c.fetchall()
         print(self.row)
-        self.c.close()
-        self.db.close()
+        # self.c.close()
+        # self.db.close()
         return self.row
+
+    def insert_query(self, query):
+        self.c.execute(query)
+        self.db.commit()
 
 
 class Tab(FloatLayout, MDTabsBase):
@@ -57,6 +56,7 @@ class MyLayout(BoxLayout, MDApp):
     fileError = None
     wifi = None
     cam_error = None
+    db = DbCon()
 
     # theme_cls = ThemeManager()
     def __init__(self, **kwargs):
@@ -103,6 +103,51 @@ class MyLayout(BoxLayout, MDApp):
     def change_screen(self, screen, *args):
         self.scr_mngr.current = screen
 
+    def inserting_into_database(self):
+        if len(self.ids.RFID.text.strip()) != 0:
+            print(self.ids.RFID.text.strip())
+            try:
+                query = f"insert into demo values ('{self.ids.RFID.text}'," \
+                        f"'{self.ids.AssetSN.text}'," \
+                        f"'{self.ids.DataCenter.text}'," \
+                        f"'{self.ids.Description.text}'," \
+                        f"'{self.ids.DeviceModel.text}'," \
+                        f"'{self.ids.Floor.text}'," \
+                        f"'{self.ids.Manufacturer.text}'," \
+                        f"'{self.ids.AssetUnitUsage.text}'," \
+                        f"'{self.ids.Room.text}'," \
+                        f"'{self.ids.SerialNumber.text}'," \
+                        f"'{self.ids.RackNo.text}'," \
+                        f"'{self.ids.Column.text}'," \
+                        f"'{self.ids.Supplier.text}'," \
+                        f"'{self.ids.Address.text}'," \
+                        f"'{self.ids.MacAddress1.text}'," \
+                        f"'{self.ids.MacAddress2.text}'," \
+                        f"'{self.ids.EquipmentCategory.text}'," \
+                        f"'{self.ids.Weight.text}'," \
+                        f"'{self.ids.InventoryCode.text}'," \
+                        f"'{self.ids.LifeCycle.text}'," \
+                        f"'{self.ids.Power.text}'," \
+                        f"'{self.ids.LastMaintenanceStaff.text}'," \
+                        f"'{self.ids.MaintenanceCycle.text}'," \
+                        f"'{self.ids.Current.text}'," \
+                        f"'{self.ids.NextMaintenanceStaff.text}'," \
+                        f"'{self.ids.Principal.text}'," \
+                        f"'{self.ids.Voltage.text}'," \
+                        f"'{self.ids.LastUpdatedTime.text}'," \
+                        f"'{self.ids.MaintenanceContact.text}'," \
+                        f"'{self.ids.FirstUseTime.text}'," \
+                        f"'{self.ids.NextUpdateTime.text}')"
+                self.db.insert_query(query)
+                self.change_screen("screen2")
+                toast("Data Stor`ed Successfully !")
+            except IntegrityError as err:
+                print(err)
+                toast("Alredy exists !")
+
+        else:
+            toast("Please enter proper data !")
+
     def calc(self, instance):
         print(self.ids['qrlabel'].text)
         if self.login_key:
@@ -120,6 +165,71 @@ class MyLayout(BoxLayout, MDApp):
     def scan(self):
         self.change_screen("screen6")
         self.ids["zbarcam"].xcamera.play = True
+
+    def clear_entries(self):
+        self.ids.RFID.text = ""
+        self.ids.AssetSN.text = ""
+        self.ids.DataCenter.text = ""
+        self.ids.Description.text = ""
+        self.ids.DeviceModel.text = ""
+        self.ids.Floor.text = ""
+        self.ids.Manufacturer.text = ""
+        self.ids.AssetUnitUsage.text = ""
+        self.ids.Room.text = ""
+        self.ids.SerialNumber.text = ""
+        self.ids.RackNo.text = ""
+        self.ids.Column.text = ""
+        self.ids.Supplier.text = ""
+        self.ids.Address.text = ""
+        self.ids.MacAddress1.text = ""
+        self.ids.MacAddress2.text = ""
+        self.ids.EquipmentCategory.text = ""
+        self.ids.Weight.text = ""
+        self.ids.InventoryCode.text = ""
+        self.ids.LifeCycle.text = ""
+        self.ids.Power.text = ""
+        self.ids.LastMaintenanceStaff.text = ""
+        self.ids.MaintenanceCycle.text = ""
+        self.ids.Current.text = ""
+        self.ids.NextMaintenanceStaff.text = ""
+        self.ids.Principal.text = ""
+        self.ids.Voltage.text = ""
+        self.ids.LastUpdatedTime.text = ""
+        self.ids.MaintenanceContact.text = ""
+        self.ids.FirstUseTime.text = ""
+        self.ids.NextUpdateTime.text = ""
+
+        self.ids.AssetSN2.text = ""
+        self.ids.DataCenter2.text = ""
+        self.ids.Description2.text = ""
+        self.ids.DeviceModel2.text = ""
+        self.ids.Floor2.text = ""
+        self.ids.Manufacturer2.text = ""
+        self.ids.AssetUnitUsage2.text = ""
+        self.ids.Room2.text = ""
+        self.ids.SerialNumber2.text = ""
+        self.ids.RackNo2.text = ""
+        self.ids.Column2.text = ""
+        self.ids.Supplier2.text = ""
+        self.ids.Address2.text = ""
+        self.ids.MacAddress12.text = ""
+        self.ids.MacAddress22.text = ""
+        self.ids.EquipmentCategory2.text = ""
+        self.ids.Weight2.text = ""
+        self.ids.InventoryCode2.text = ""
+        self.ids.LifeCycle2.text = ""
+        self.ids.Power2.text = ""
+        self.ids.LastMaintenanceStaff2.text = ""
+        self.ids.MaintenanceCycle2.text = ""
+        self.ids.Current2.text = ""
+        self.ids.NextMaintenanceStaff2.text = ""
+        self.ids.Principal2.text = ""
+        self.ids.Voltage2.text = ""
+        self.ids.LastUpdatedTime2.text = ""
+        self.ids.MaintenanceContact2.text = ""
+        self.ids.FirstUseTime2.text = ""
+        self.ids.NextUpdateTime2.text = ""
+
 
     def show_alert_dialog(self):
         if not self.dialog:
@@ -144,11 +254,11 @@ class MyLayout(BoxLayout, MDApp):
     def logout(self):
         self.dialog.dismiss()
         self.change_screen("screen1")
+        self.clear_entries()
         # self.ids.container.
 
     def open_data_table(self):
         if not self.database_key:
-            self.db = DbCon()
             self.rows = self.db.get_rows()
             self.database_key = True
             count = 0
@@ -157,37 +267,87 @@ class MyLayout(BoxLayout, MDApp):
                 self.ids.container.add_widget(
                     ListItemWithCheckbox(text=f"{count}",
                                          on_release=self.click,
-                                         secondary_text=f"{i[1]},{i[2]},{i[3]},{i[4]},{i[6]} ",
+                                         secondary_text=f"{i[0]},{i[1]},{i[2]},{i[3]},{i[7]} ",
                                          )
                 )
         else:
             # ListItemWithCheckbox.clear_widgets(self.ids.container)
-            print("Already Loaded")
+            toast("Already Loaded")
 
     def cleardatabase(self):
         self.database_key = False
+        self.clear_entries()
         ListItemWithCheckbox.clear_widgets(self.ids.container)
 
     def click(self, ListItemWithCheckbox):
-        print(str(ListItemWithCheckbox.text))
+        # print(str(ListItemWithCheckbox.text))
         print(self.rows[int(ListItemWithCheckbox.text) - 1])
-        self.ids.RFID1.text = self.rows[int(ListItemWithCheckbox.text) - 1][1]
-        self.ids.AssetSN2.text = self.rows[int(ListItemWithCheckbox.text) - 1][2]
-        self.ids.DataCenter2.text = str(self.rows[int(ListItemWithCheckbox.text) - 1][3])
-        self.ids.Description2.text = self.rows[int(ListItemWithCheckbox.text) - 1][4]
-        self.ids.DeviceModel2.text = self.rows[int(ListItemWithCheckbox.text) - 1][5]
-        self.ids.Floor2.text = self.rows[int(ListItemWithCheckbox.text) - 1][6]
-        self.ids.Manufacturer2.text = self.rows[int(ListItemWithCheckbox.text) - 1][7]
-        self.ids.AssetUnitUsage2.text = self.rows[int(ListItemWithCheckbox.text) - 1][8]
-        self.ids.Room2.text = self.rows[int(ListItemWithCheckbox.text) - 1][9]
-        self.ids.SerialNumber2.text = self.rows[int(ListItemWithCheckbox.text) - 1][10]
-        self.ids.RackNo2.text = self.rows[int(ListItemWithCheckbox.text) - 1][11]
-        self.ids.Column2.text = self.rows[int(ListItemWithCheckbox.text) - 1][12]
-        self.ids.Supplier2.text = self.rows[int(ListItemWithCheckbox.text) - 1][13]
-        self.ids.Address2.text = self.rows[int(ListItemWithCheckbox.text) - 1][14]
-        self.ids.MacAddress12.text = self.rows[int(ListItemWithCheckbox.text) - 1][15]
-        self.ids.MacAddress22.text = self.rows[int(ListItemWithCheckbox.text) - 1][16]
+        self.ids.RFID1.text = self.rows[int(ListItemWithCheckbox.text) - 1][0]
+        self.ids.AssetSN2.text = self.rows[int(ListItemWithCheckbox.text) - 1][1]
+        self.ids.DataCenter2.text = str(self.rows[int(ListItemWithCheckbox.text) - 1][2])
+        self.ids.Description2.text = self.rows[int(ListItemWithCheckbox.text) - 1][3]
+        self.ids.DeviceModel2.text = self.rows[int(ListItemWithCheckbox.text) - 1][4]
+        self.ids.Floor2.text = self.rows[int(ListItemWithCheckbox.text) - 1][5]
+        self.ids.Manufacturer2.text = self.rows[int(ListItemWithCheckbox.text) - 1][6]
+        self.ids.AssetUnitUsage2.text = self.rows[int(ListItemWithCheckbox.text) - 1][7]
+        self.ids.Room2.text = self.rows[int(ListItemWithCheckbox.text) - 1][8]
+        self.ids.SerialNumber2.text = self.rows[int(ListItemWithCheckbox.text) - 1][9]
+        self.ids.RackNo2.text = self.rows[int(ListItemWithCheckbox.text) - 1][10]
+        self.ids.Column2.text = self.rows[int(ListItemWithCheckbox.text) - 1][11]
+        self.ids.Supplier2.text = self.rows[int(ListItemWithCheckbox.text) - 1][12]
+        self.ids.Address2.text = self.rows[int(ListItemWithCheckbox.text) - 1][13]
+        self.ids.MacAddress12.text = self.rows[int(ListItemWithCheckbox.text) - 1][14]
+        self.ids.MacAddress22.text = self.rows[int(ListItemWithCheckbox.text) - 1][15]
         self.change_screen("screen9")
+
+    def update_database(self):
+        print(self.ids.AssetSN2.text)
+        query =f"update demo set AssetSN = '{self.ids.AssetSN2.text}'," \
+               f"DataCenter = '{self.ids.DataCenter2.text}'," \
+               f"Description = '{self.ids.Description2.text}'," \
+               f"DeviceModel = '{self.ids.DeviceModel2.text}'," \
+               f"Floor = '{self.ids.Floor2.text}'," \
+               f"Manufacturer = '{self.ids.Manufacturer2.text}'," \
+               f"AssetUnitUsage = '{self.ids.AssetUnitUsage2.text}'," \
+               f"Room = '{self.ids.Room2.text}'," \
+               f"SerialNumber = '{self.ids.SerialNumber2.text}'," \
+               f"RackNo = '{self.ids.RackNo2.text}'," \
+               f"Cols = '{self.ids.Column2.text}'," \
+               f"Supplier = '{self.ids.Supplier2.text}'," \
+               f"Address = '{self.ids.Address2.text}'," \
+               f"MacAddress1 = '{self.ids.MacAddress12.text}'," \
+               f"MacAddress2 = '{self.ids.MacAddress22.text}'," \
+               f"EquipmentCategory = '{self.ids.EquipmentCategory2.text}'," \
+               f"Weight = '{self.ids.Weight2.text}'," \
+               f"InventoryCode = '{self.ids.InventoryCode2.text}'," \
+               f"LifeCycle = '{self.ids.LifeCycle2.text}'," \
+               f"Power = '{self.ids.Power2.text}'," \
+               f"LastMaintenanceStaff = '{self.ids.LastMaintenanceStaff2.text}'," \
+               f"MaintenanceCycle = '{self.ids.MaintenanceCycle2.text}'," \
+               f"Current = '{self.ids.Current2.text}'," \
+               f"NextMaintenanceStaff = '{self.ids.NextMaintenanceStaff2.text}'," \
+               f"Principal = '{self.ids.Principal2.text}'," \
+               f"Voltage = '{self.ids.Voltage2.text}'," \
+               f"LastUpdatedTime = '{self.ids.LastUpdatedTime2.text}'," \
+               f"MaintenanceContact = '{self.ids.MaintenanceContact2.text}',"\
+               f"FirstUseTime = '{self.ids.FirstUseTime2.text}'," \
+               f"NextUpdateTime = '{self.ids.NextUpdateTime2.text}' "\
+               f"where RFID = '{self.ids.RFID1.text}'"
+        print(query)
+        self.db.insert_query(query)
+        toast("Data Entry Updated !")
+
+    def delete_entry(self):
+        query = f"delete from demo where RFID = '{self.ids.RFID1.text}'"
+        self.db.insert_query(query)
+        toast("Data Entry Deleted!")
+        self.change_screen("screen5")
+
+    def delete_all_entries(self):
+        query = f"delete from demo"
+        self.db.insert_query(query)
+        toast("All Entries Deleted!")
+        # self.change_screen("screen5")
 
     def file_manager_open(self):
         self.file_manager.show('/home/scientist/')  # output manager to the screen
@@ -259,7 +419,6 @@ class MyLayout(BoxLayout, MDApp):
             client.send(data.encode(FORMAT))
             msg = client.recv(SIZE).decode(FORMAT)
             print(f"server recived  {msg}")
-
             file.close()
             client.close()
         except Exception as err:
@@ -286,10 +445,5 @@ if __name__ == '__main__':
     Window.show_cursor = True
     Window.size = (800, 480)
     Window.borderless = False
-    # Window.size = (1366, 768)
-    # loop.run_until_complete(
-    #     async_runTouchApp(DemoApp().run(), async_lib='asyncio'))
-    # loop.close()
-
     DemoApp().run()
     # MyLayout().run()

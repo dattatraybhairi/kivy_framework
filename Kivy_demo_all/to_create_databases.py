@@ -17,11 +17,10 @@ if __name__ == '__main__':
     cursror = db.cursor()
     print("cursor object is created", cursror)
 
-    sql = " CREATE TABLE IF NOT EXISTS demo (id INT AUTO_INCREMENT PRIMARY KEY," \
-          " assettag VARCHAR(20) UNIQUE," \
-          " DeviceMOdel VARCHAR(64)," \
-          "AssettUnitStage INT " \
-          ", RackNo VARCHAR(64), " \
+    sql = " CREATE TABLE IF NOT EXISTS demo (assettag VARCHAR(20) PRIMARY KEY," \
+          "DeviceMOdel VARCHAR(64)," \
+          "AssettUnitStage VARCHAR(64)" \
+          ",RackNo VARCHAR(64)," \
           "Address VARCHAR(64), " \
           "DataCenter VARCHAR(64), " \
           "Floor VARCHAR(64), " \

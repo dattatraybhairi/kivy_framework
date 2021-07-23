@@ -193,13 +193,15 @@ MyLayout:
                         theme_text_color: "Custom"
                         text_color: app.theme_cls.primary_color
                         on_release: root.change_screen("screen2")
+                        on_release: root.clear_entries()
 
                     MDIconButton:
                         icon: "content-save-outline"
                         user_font_size: "40sp"
                         theme_text_color: "Custom"
                         text_color: app.theme_cls.primary_color
-                        on_release: root.change_screen("screen2")
+                        #on_release: root.change_screen("screen2")
+                        on_release: root.inserting_into_database()
 
                 MDTabs:
                     Tab:
@@ -241,49 +243,50 @@ MyLayout:
                                         text_color: app.theme_cls.primary_color
                                         on_release: root.change_screen("screen10")
 
+
                                 MDTextField:
                                     id: AssetSN
                                     hint_text: " Asset SN "
                                     helper_text_mode: "on_focus"
-                                    required: True
+                                    #required: True
                                 MDTextField:
                                     id: DataCenter
                                     hint_text: "Data Center "
                                     helper_text_mode: "on_focus"
-                                    required: True
+                                    #required: True
                                 MDTextField:
                                     id: Description
                                     hint_text: " Description "
                                     helper_text_mode: "on_focus"
-                                    required: True
+                                    #required: True
                                 MDTextField:
                                     id: DeviceModel
                                     hint_text: " Device Model "
                                     helper_text_mode: "on_focus"
-                                    required: True
+                                    #required: True
                                 MDTextField:
                                     id: Floor
                                     hint_text: " Floor "
                                     helper_text_mode: "on_focus"
-                                    required: True
+                                    #required: True
 
                                 MDTextField:
                                     id: Manufacturer
                                     hint_text: " Manufacturer "
                                     helper_text_mode: "on_focus"
-                                    required: True
+                                    #required: True
 
                                 MDTextField:
                                     id: AssetUnitUsage
                                     hint_text: " Asset Unit Usage "
                                     helper_text_mode: "on_focus"
-                                    required: True
+                                    #required: True
 
                                 MDTextField:
                                     id: Room
                                     hint_text: " Room "
                                     helper_text_mode: "on_focus"
-                                    required: True
+                                    #required: True
 
                                 MDTextField:
                                     id: SerialNumber
@@ -295,40 +298,57 @@ MyLayout:
                                     id: RackNo
                                     hint_text: " Rack No "
                                     helper_text_mode: "on_focus"
-                                    required: True
+                                    #required: True
 
                                 MDTextField:
                                     id: Column
                                     hint_text: " Column "
                                     helper_text_mode: "on_focus"
-                                    required: True
+                                    #required: True
 
                                 MDTextField:
                                     id: Supplier
                                     hint_text: " Supplier "
                                     helper_text_mode: "on_focus"
-                                    required: True
+                                    #required: True
 
                                 MDTextField:
                                     id: Address
                                     hint_text: " Address "
                                     helper_text_mode: "on_focus"
-                                    required: True
+                                    #required: True
 
                                 MDTextField:
                                     id: MacAddress1
                                     hint_text: " MAC Address1 "
                                     helper_text_mode: "on_focus"
-                                    required: True
+                                    #required: True
                                 MDTextField:
                                     id: MacAddress2
                                     hint_text: " MAC Address2 "
                                     helper_text_mode: "on_focus"
-                                    required: True
-                                BoxLayout:
-                                    orientation: 'vertical'
-                                BoxLayout:
-                                    orientation: 'vertical'
+                                    #required: True
+                                Image:
+                                    source: 'blank.png'
+                                Image:
+                                    source: 'blank.png'
+                                Image:
+                                    source: 'blank.png'
+                                Image:
+                                    source: 'blank.png'
+                                Image:
+                                    source: 'blank.png'
+                                Image:
+                                    source: 'blank.png'
+                                Image:
+                                    source: 'blank.png'
+                                Image:
+                                    source: 'blank.png'
+                                Image:
+                                    source: 'blank.png'
+                                Image:
+                                    source: 'blank.png'
+
 
 
                     Tab:
@@ -347,68 +367,68 @@ MyLayout:
                                     id: EquipmentCategory
                                     hint_text: "Equipment Category"
                                     helper_text_mode: "on_focus"
-                                    required: True
+                                    #required: True
                                 MDTextField:
                                     id: Weight
                                     hint_text: " Weight(KG) "
                                     helper_text_mode: "on_focus"
-                                    required: True
+                                    #required: True
                                 MDTextField:
                                     id: InventoryCode
                                     hint_text: " Inventory Code "
                                     helper_text_mode: "on_focus"
-                                    required: True
+                                    #required: True
                                 MDTextField:
                                     id: LifeCycle
                                     hint_text: " Life Cycle "
                                     helper_text_mode: "on_focus"
-                                    required: True
+                                    #required: True
                                 MDTextField:
                                     id: Power
                                     hint_text: " Power(W) "
                                     helper_text_mode: "on_focus"
-                                    required: True
+                                    #required: True
                                 MDTextField:
                                     id: LastMaintenanceStaff
                                     hint_text: " Last Maintenance Staff "
                                     helper_text_mode: "on_focus"
-                                    required: True
+                                    #required: True
 
                                 MDTextField:
                                     id: MaintenanceCycle
                                     hint_text: " Maintenance Cycle "
                                     helper_text_mode: "on_focus"
-                                    required: True
+                                    #required: True
 
                                 MDTextField:
                                     id: Current
                                     hint_text: " Current(A) "
                                     helper_text_mode: "on_focus"
-                                    required: True
+                                    #required: True
 
                                 MDTextField:
                                     id: NextMaintenanceStaff
                                     hint_text: " Next Maintenance Staff "
                                     helper_text_mode: "on_focus"
-                                    required: True
+                                    #required: True
 
                                 MDTextField:
                                     id: Principal
                                     hint_text: " Principal "
                                     helper_text_mode: "on_focus"
-                                    required: True
+                                    #required: True
 
                                 MDTextField:
                                     id: Voltage
                                     hint_text: " Voltage(V) "
                                     helper_text_mode: "on_focus"
-                                    required: True
+                                    #required: True
 
                                 MDTextField:
                                     id: LastUpdatedTime
                                     hint_text: " Last Updated Time "
                                     helper_text_mode: "on_focus"
-                                    required: True
+                                    #required: True
 
                                 MDTextField:
                                     id: MaintenanceContact
@@ -420,13 +440,34 @@ MyLayout:
                                     id: FirstUseTime
                                     hint_text: " First Use Time "
                                     helper_text_mode: "on_focus"
-                                    required: True
+                                    #required: True
 
                                 MDTextField:
                                     id: NextUpdateTime
                                     hint_text: " Next Update Time "
                                     helper_text_mode: "on_focus"
-                                    required: True
+                                    #required: True
+                                Image:
+                                    source: 'blank.png'
+                                Image:
+                                    source: 'blank.png'
+                                Image:
+                                    source: 'blank.png'
+                                Image:
+                                    source: 'blank.png'
+                                Image:
+                                    source: 'blank.png'
+                                Image:
+                                    source: 'blank.png'
+                                Image:
+                                    source: 'blank.png'
+                                Image:
+                                    source: 'blank.png'
+                                Image:
+                                    source: 'blank.png'
+                                Image:
+                                    source: 'blank.png'
+
 
 
 #000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
@@ -449,7 +490,7 @@ MyLayout:
                         theme_text_color: "Custom"
                         text_color: app.theme_cls.primary_color
                         on_release: root.change_screen("screen2")
-
+                        on_release: root.clear_entries()
 
                 BoxLayout:
                     orientation: 'horizontal'
@@ -486,7 +527,7 @@ MyLayout:
                             user_font_size: "140sp"
                             theme_text_color: "Custom"
                             text_color: app.theme_cls.primary_color
-                            #on_release: root.change_screen("screen2")
+                            on_release: root.delete_all_entries()
                         MDRectangleFlatButton:
                             text: "          Delete Database        "
                             text_color: app.theme_cls.primary_color
@@ -513,6 +554,7 @@ MyLayout:
                         text_color: app.theme_cls.primary_color
                         on_release: root.change_screen("screen2")
                         on_release:root.cleardatabase()
+                        on_release: root.clear_entries()
 
                 ScrollView:
                     MDList:
@@ -523,7 +565,6 @@ MyLayout:
         MDScreen:
             id: screen6
             name: 'screen6'
-            #export
             BoxLayout:
                 orientation: 'vertical'
                 MDToolbar:
@@ -638,12 +679,7 @@ MyLayout:
         MDScreen:
             id: screen8 #sending file
             name: 'screen8'
-            MDSpinner:
-                id:spinner_ftp
-                size_hint: None, None
-                size: dp(46), dp(46)
-                pos_hint: {'center_x': .5, 'center_y': .6}
-                active: False
+
             MDToolbar:
                 md_bg_color: 0, 0, 1, 1
                 title: "Upload File to Server"
@@ -734,13 +770,23 @@ MyLayout:
                         theme_text_color: "Custom"
                         text_color: app.theme_cls.primary_color
                         on_release: root.change_screen("screen5")
+                        on_release: root.clear_entries()
 
                     MDIconButton:
-                        icon: "content-save-outline"
+                        icon: "delete-empty"
+                        user_font_size: "40sp"
+                        theme_text_color: "Custom"
+                        text_color: app.theme_cls.primary_color
+                        on_release: root.delete_entry()
+
+
+                    MDIconButton:
+                        icon: "database-arrow-up"
                         user_font_size: "40sp"
                         theme_text_color: "Custom"
                         text_color: app.theme_cls.primary_color
                         on_release: root.change_screen("screen5")
+                        on_release: root.update_database()
 
                 MDTabs:
                     Tab:
@@ -774,69 +820,77 @@ MyLayout:
                                         theme_text_color: "Custom"
                                         text_color: app.theme_cls.primary_color
                                         on_release: root.scan()
+                                    MDIconButton:
+                                        id: "nfc_tag"
+                                        icon: "credit-card-wireless"
+                                        user_font_size: "50sp"
+                                        theme_text_color: "Custom"
+                                        text_color: app.theme_cls.primary_color
+                                        on_release: root.change_screen("screen10")
+
 
 
                                 MDTextField:
                                     id: AssetSN2
                                     hint_text: " Asset SN "
                                     helper_text_mode: "on_focus"
-                                    required: True
+                                    #required: True
                                 MDTextField:
                                     id: DataCenter2
                                     hint_text: "Data Center "
                                     helper_text_mode: "on_focus"
-                                    required: True
+                                    #required: True
                                 MDTextField:
                                     id: Description2
                                     hint_text: " Description "
                                     helper_text_mode: "on_focus"
-                                    required: True
+                                    #required: True
                                 MDTextField:
                                     id: DeviceModel2
                                     hint_text: " Device Model "
                                     helper_text_mode: "on_focus"
-                                    required: True
+                                    #required: True
                                 MDTextField:
                                     id: Floor2
                                     hint_text: " Floor "
                                     helper_text_mode: "on_focus"
-                                    required: True
+                                    #required: True
 
                                 MDTextField:
                                     id: Manufacturer2
                                     hint_text: " Manufacturer "
                                     helper_text_mode: "on_focus"
-                                    required: True
+                                    #required: True
 
                                 MDTextField:
                                     id: AssetUnitUsage2
                                     hint_text: " Asset Unit Usage "
                                     helper_text_mode: "on_focus"
-                                    required: True
+                                    #required: True
 
                                 MDTextField:
                                     id: Room2
                                     hint_text: " Room "
                                     helper_text_mode: "on_focus"
-                                    required: True
+                                    #required: True
 
                                 MDTextField:
                                     id: SerialNumber2
                                     hint_text: " Serial Number "
                                     helper_text_mode: "on_focus"
-                                    required: True
+                                    #required: True
 
                                 MDTextField:
                                     id: RackNo2
                                     hint_text: " Rack No "
                                     helper_text_mode: "on_focus"
-                                    required: True
+                                    #required: True
 
                                 MDTextField:
                                     id: Column2
                                     hint_text: " Column "
                                     helper_text_mode: "on_focus"
-                                    required: True
+                                    #required: True
 
                                 MDTextField:
                                     id: Supplier2
@@ -848,23 +902,38 @@ MyLayout:
                                     id: Address2
                                     hint_text: " Address "
                                     helper_text_mode: "on_focus"
-                                    required: True
+                                    #required: True
 
                                 MDTextField:
                                     id: MacAddress12
                                     hint_text: " MAC Address1 "
                                     helper_text_mode: "on_focus"
-                                    required: True
+                                    #required: True
                                 MDTextField:
                                     id: MacAddress22
                                     hint_text: " MAC Address2 "
                                     helper_text_mode: "on_focus"
-                                    required: True
-                                BoxLayout:
-                                    orientation: 'vertical'
-                                BoxLayout:
-                                    orientation: 'vertical'
-
+                                    #required: True
+                                Image:
+                                    source: 'blank.png'
+                                Image:
+                                    source: 'blank.png'
+                                Image:
+                                    source: 'blank.png'
+                                Image:
+                                    source: 'blank.png'
+                                Image:
+                                    source: 'blank.png'
+                                Image:
+                                    source: 'blank.png'
+                                Image:
+                                    source: 'blank.png'
+                                Image:
+                                    source: 'blank.png'
+                                Image:
+                                    source: 'blank.png'
+                                Image:
+                                    source: 'blank.png'
 
                     Tab:
                         text: "Pro Info"
@@ -882,44 +951,44 @@ MyLayout:
                                     id: EquipmentCategory2
                                     hint_text: "Equipment Category"
                                     helper_text_mode: "on_focus"
-                                    required: True
+                                    #required: True
                                 MDTextField:
                                     id: Weight2
                                     hint_text: " Weight(KG) "
                                     helper_text_mode: "on_focus"
-                                    required: True
+                                    #required: True
                                 MDTextField:
                                     id: InventoryCode2
                                     hint_text: " Inventory Code "
                                     helper_text_mode: "on_focus"
-                                    required: True
+                                    #required: True
                                 MDTextField:
                                     id: LifeCycle2
                                     hint_text: " Life Cycle "
                                     helper_text_mode: "on_focus"
-                                    required: True
+                                    #required: True
                                 MDTextField:
                                     id: Power2
                                     hint_text: " Power(W) "
                                     helper_text_mode: "on_focus"
-                                    required: True
+                                    #required: True
                                 MDTextField:
                                     id: LastMaintenanceStaff2
                                     hint_text: " Last Maintenance Staff "
                                     helper_text_mode: "on_focus"
-                                    required: True
+                                    #required: True
 
                                 MDTextField:
                                     id: MaintenanceCycle2
                                     hint_text: " Maintenance Cycle "
                                     helper_text_mode: "on_focus"
-                                    required: True
+                                    #required: True
 
                                 MDTextField:
                                     id: Current2
                                     hint_text: " Current(A) "
                                     helper_text_mode: "on_focus"
-                                    required: True
+                                    #required: True
 
                                 MDTextField:
                                     id: NextMaintenanceStaff2
@@ -931,37 +1000,61 @@ MyLayout:
                                     id: Principal2
                                     hint_text: " Principal "
                                     helper_text_mode: "on_focus"
-                                    required: True
+                                    #required: True
 
                                 MDTextField:
                                     id: Voltage2
                                     hint_text: " Voltage(V) "
                                     helper_text_mode: "on_focus"
-                                    required: True
+                                    #required: True
 
                                 MDTextField:
                                     id: LastUpdatedTime2
                                     hint_text: " Last Updated Time "
                                     helper_text_mode: "on_focus"
-                                    required: True
+                                    #required: True
 
                                 MDTextField:
                                     id: MaintenanceContact2
                                     hint_text: " MaintenanceContact "
                                     helper_text_mode: "on_focus"
-                                    required: True
+                                    #required: True
 
                                 MDTextField:
                                     id: FirstUseTime2
                                     hint_text: " First Use Time "
                                     helper_text_mode: "on_focus"
-                                    required: True
+                                    #required: True
 
                                 MDTextField:
                                     id: NextUpdateTime2
                                     hint_text: " Next Update Time "
                                     helper_text_mode: "on_focus"
-                                    required: True
+                                    #required: True
+                                Image:
+                                    source: 'blank.png'
+                                Image:
+                                    source: 'blank.png'
+                                Image:
+                                    source: 'blank.png'
+                                Image:
+                                    source: 'blank.png'
+                                Image:
+                                    source: 'blank.png'
+                                Image:
+                                    source: 'blank.png'
+                                Image:
+                                    source: 'blank.png'
+                                Image:
+                                    source: 'blank.png'
+                                Image:
+                                    source: 'blank.png'
+                                Image:
+                                    source: 'blank.png'
+
+
+
+
 
 #000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
         MDScreen:
@@ -983,11 +1076,11 @@ MyLayout:
                         text_color: app.theme_cls.primary_color
                         on_release: root.change_screen("screen3")
 
-                Video:
+                Image:
                     source: 'nfc.gif'
                     center: self.parent.center
                     size: 500, 500
                     allow_stretch: True
-                    anim_delay: 0.02
+                    anim_delay: 0.015
                     mipmap: False
                     #anim_loop: 1
