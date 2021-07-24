@@ -3,7 +3,9 @@ import socket
 import asyncio
 from MySQLdb import IntegrityError
 from kivy.config import Config
+from kivy.core.image import Image
 from kivy.properties import StringProperty
+from kivy.uix.label import Label
 from kivymd.toast import toast
 from kivymd.uix.filemanager import MDFileManager
 import MySQLdb
@@ -13,14 +15,11 @@ from kivymd.uix.list import TwoLineIconListItem
 from kivymd.uix.tab import MDTabsBase
 from kivy.uix.floatlayout import FloatLayout
 from kivymd.app import MDApp
-from kivymd.uix.button import MDFlatButton
+from kivymd.uix.button import MDFlatButton, MDIconButton
 from kivymd.uix.dialog import MDDialog
 import os
 
 login_key = False
-Config.set('kivy', 'keyboard_mode', 'dock')
-loop = asyncio.get_event_loop()
-
 
 class DbCon:
 
@@ -47,7 +46,6 @@ class Tab(FloatLayout, MDTabsBase):
 
 class ListItemWithCheckbox(TwoLineIconListItem):
     '''Custom list item.'''
-    #
     icon = StringProperty("checkbox-marked-circle")
 
 
@@ -55,8 +53,12 @@ class MyLayout(BoxLayout, MDApp):
     dialog = None
     fileError = None
     wifi = None
+    empty = None
     cam_error = None
+    delete_warning = None
+    delete_warning_all = None
     db = DbCon()
+    brightness_key = False
 
     # theme_cls = ThemeManager()
     def __init__(self, **kwargs):
@@ -140,7 +142,8 @@ class MyLayout(BoxLayout, MDApp):
                         f"'{self.ids.NextUpdateTime.text}')"
                 self.db.insert_query(query)
                 self.change_screen("screen2")
-                toast("Data Stor`ed Successfully !")
+                self.clear_entries()
+                toast("Data Stored Successfully !")
             except IntegrityError as err:
                 print(err)
                 toast("Alredy exists !")
@@ -230,7 +233,6 @@ class MyLayout(BoxLayout, MDApp):
         self.ids.FirstUseTime2.text = ""
         self.ids.NextUpdateTime2.text = ""
 
-
     def show_alert_dialog(self):
         if not self.dialog:
             self.dialog = MDDialog(
@@ -249,7 +251,17 @@ class MyLayout(BoxLayout, MDApp):
         self.dialog.open()
 
     def sleep(self):
-        p = os.popen('sudo -E sh -c \'echo 0 > /sys/class/backlight/rpi_backlight/bl_power\'')
+        print("shutdown")
+
+    def brightness(self):
+        if not self.brightness_key:
+            print("low")
+            self.brightness_key = True
+            p = os.popen('sudo -E sh -c \'echo 1 > /sys/class/backlight/rpi_backlight/bl_power\'')
+        else:
+            print("HIGH")
+            self.brightness_key = False
+            p = os.popen('sudo -E sh -c \'echo 0 > /sys/class/backlight/rpi_backlight/bl_power\'')
 
     def logout(self):
         self.dialog.dismiss()
@@ -258,9 +270,8 @@ class MyLayout(BoxLayout, MDApp):
         # self.ids.container.
 
     def open_data_table(self):
-        if not self.database_key:
-            self.rows = self.db.get_rows()
-            self.database_key = True
+        self.rows = self.db.get_rows()
+        if len(self.rows):
             count = 0
             for i in self.rows:
                 count = count + 1
@@ -271,11 +282,34 @@ class MyLayout(BoxLayout, MDApp):
                                          )
                 )
         else:
-            # ListItemWithCheckbox.clear_widgets(self.ids.container)
-            toast("Already Loaded")
+            print(len(self.rows))
+            if not self.empty:
+                self.empty = MDDialog(
+                    title="Empty ",
+                    text="No records found, You want to add one ?",
+                    buttons=[
+                        MDFlatButton(
+                            text="No", text_color=self.theme_cls.primary_color,
+                            on_release=lambda _: self.empty_list_dissimis()
+                        ),
+                        MDFlatButton(
+                            text="YES", text_color=self.theme_cls.primary_color,
+                            on_release=lambda _: self.adding_new_record()
+                        ),
+                    ],
+                )
+            self.empty.open()
+
+    def adding_new_record(self):
+        self.change_screen("screen3")
+        self.empty.dismiss()
+
+    def empty_list_dissimis(self):
+        self.change_screen("screen2")
+        self.empty.dismiss()
+
 
     def cleardatabase(self):
-        self.database_key = False
         self.clear_entries()
         ListItemWithCheckbox.clear_widgets(self.ids.container)
 
@@ -284,7 +318,7 @@ class MyLayout(BoxLayout, MDApp):
         print(self.rows[int(ListItemWithCheckbox.text) - 1])
         self.ids.RFID1.text = self.rows[int(ListItemWithCheckbox.text) - 1][0]
         self.ids.AssetSN2.text = self.rows[int(ListItemWithCheckbox.text) - 1][1]
-        self.ids.DataCenter2.text = str(self.rows[int(ListItemWithCheckbox.text) - 1][2])
+        self.ids.DataCenter2.text = self.rows[int(ListItemWithCheckbox.text) - 1][2]
         self.ids.Description2.text = self.rows[int(ListItemWithCheckbox.text) - 1][3]
         self.ids.DeviceModel2.text = self.rows[int(ListItemWithCheckbox.text) - 1][4]
         self.ids.Floor2.text = self.rows[int(ListItemWithCheckbox.text) - 1][5]
@@ -298,54 +332,115 @@ class MyLayout(BoxLayout, MDApp):
         self.ids.Address2.text = self.rows[int(ListItemWithCheckbox.text) - 1][13]
         self.ids.MacAddress12.text = self.rows[int(ListItemWithCheckbox.text) - 1][14]
         self.ids.MacAddress22.text = self.rows[int(ListItemWithCheckbox.text) - 1][15]
+        self.ids.EquipmentCategory2.text = self.rows[int(ListItemWithCheckbox.text) - 1][16]
+        self.ids.Weight2.text = self.rows[int(ListItemWithCheckbox.text) - 1][17]
+        self.ids.InventoryCode2.text = self.rows[int(ListItemWithCheckbox.text) - 1][18]
+        self.ids.LifeCycle2.text =self.rows[int(ListItemWithCheckbox.text) - 1][19]
+        self.ids.Power2.text = self.rows[int(ListItemWithCheckbox.text) - 1][20]
+        self.ids.LastMaintenanceStaff2.text = self.rows[int(ListItemWithCheckbox.text) - 1][21]
+        self.ids.MaintenanceCycle2.text = self.rows[int(ListItemWithCheckbox.text) - 1][22]
+        self.ids.Current2.text = self.rows[int(ListItemWithCheckbox.text) - 1][23]
+        self.ids.NextMaintenanceStaff2.text = self.rows[int(ListItemWithCheckbox.text) - 1][24]
+        self.ids.Principal2.text = self.rows[int(ListItemWithCheckbox.text) - 1][25]
+        self.ids.Voltage2.text = self.rows[int(ListItemWithCheckbox.text) - 1][26]
+        self.ids.LastUpdatedTime2.text = self.rows[int(ListItemWithCheckbox.text) - 1][27]
+        self.ids.MaintenanceContact2.text = self.rows[int(ListItemWithCheckbox.text) - 1][28]
+        self.ids.FirstUseTime2.text = self.rows[int(ListItemWithCheckbox.text) - 1][29]
+        self.ids.NextUpdateTime2.text = self.rows[int(ListItemWithCheckbox.text) - 1][30]
+
+
+
         self.change_screen("screen9")
 
     def update_database(self):
         print(self.ids.AssetSN2.text)
-        query =f"update demo set AssetSN = '{self.ids.AssetSN2.text}'," \
-               f"DataCenter = '{self.ids.DataCenter2.text}'," \
-               f"Description = '{self.ids.Description2.text}'," \
-               f"DeviceModel = '{self.ids.DeviceModel2.text}'," \
-               f"Floor = '{self.ids.Floor2.text}'," \
-               f"Manufacturer = '{self.ids.Manufacturer2.text}'," \
-               f"AssetUnitUsage = '{self.ids.AssetUnitUsage2.text}'," \
-               f"Room = '{self.ids.Room2.text}'," \
-               f"SerialNumber = '{self.ids.SerialNumber2.text}'," \
-               f"RackNo = '{self.ids.RackNo2.text}'," \
-               f"Cols = '{self.ids.Column2.text}'," \
-               f"Supplier = '{self.ids.Supplier2.text}'," \
-               f"Address = '{self.ids.Address2.text}'," \
-               f"MacAddress1 = '{self.ids.MacAddress12.text}'," \
-               f"MacAddress2 = '{self.ids.MacAddress22.text}'," \
-               f"EquipmentCategory = '{self.ids.EquipmentCategory2.text}'," \
-               f"Weight = '{self.ids.Weight2.text}'," \
-               f"InventoryCode = '{self.ids.InventoryCode2.text}'," \
-               f"LifeCycle = '{self.ids.LifeCycle2.text}'," \
-               f"Power = '{self.ids.Power2.text}'," \
-               f"LastMaintenanceStaff = '{self.ids.LastMaintenanceStaff2.text}'," \
-               f"MaintenanceCycle = '{self.ids.MaintenanceCycle2.text}'," \
-               f"Current = '{self.ids.Current2.text}'," \
-               f"NextMaintenanceStaff = '{self.ids.NextMaintenanceStaff2.text}'," \
-               f"Principal = '{self.ids.Principal2.text}'," \
-               f"Voltage = '{self.ids.Voltage2.text}'," \
-               f"LastUpdatedTime = '{self.ids.LastUpdatedTime2.text}'," \
-               f"MaintenanceContact = '{self.ids.MaintenanceContact2.text}',"\
-               f"FirstUseTime = '{self.ids.FirstUseTime2.text}'," \
-               f"NextUpdateTime = '{self.ids.NextUpdateTime2.text}' "\
-               f"where RFID = '{self.ids.RFID1.text}'"
+        query = f"update demo set AssetSN = '{self.ids.AssetSN2.text}'," \
+                f"DataCenter = '{self.ids.DataCenter2.text}'," \
+                f"Description = '{self.ids.Description2.text}'," \
+                f"DeviceModel = '{self.ids.DeviceModel2.text}'," \
+                f"Floor = '{self.ids.Floor2.text}'," \
+                f"Manufacturer = '{self.ids.Manufacturer2.text}'," \
+                f"AssetUnitUsage = '{self.ids.AssetUnitUsage2.text}'," \
+                f"Room = '{self.ids.Room2.text}'," \
+                f"SerialNumber = '{self.ids.SerialNumber2.text}'," \
+                f"RackNo = '{self.ids.RackNo2.text}'," \
+                f"Cols = '{self.ids.Column2.text}'," \
+                f"Supplier = '{self.ids.Supplier2.text}'," \
+                f"Address = '{self.ids.Address2.text}'," \
+                f"MacAddress1 = '{self.ids.MacAddress12.text}'," \
+                f"MacAddress2 = '{self.ids.MacAddress22.text}'," \
+                f"EquipmentCategory = '{self.ids.EquipmentCategory2.text}'," \
+                f"Weight = '{self.ids.Weight2.text}'," \
+                f"InventoryCode = '{self.ids.InventoryCode2.text}'," \
+                f"LifeCycle = '{self.ids.LifeCycle2.text}'," \
+                f"Power = '{self.ids.Power2.text}'," \
+                f"LastMaintenanceStaff = '{self.ids.LastMaintenanceStaff2.text}'," \
+                f"MaintenanceCycle = '{self.ids.MaintenanceCycle2.text}'," \
+                f"Current = '{self.ids.Current2.text}'," \
+                f"NextMaintenanceStaff = '{self.ids.NextMaintenanceStaff2.text}'," \
+                f"Principal = '{self.ids.Principal2.text}'," \
+                f"Voltage = '{self.ids.Voltage2.text}'," \
+                f"LastUpdatedTime = '{self.ids.LastUpdatedTime2.text}'," \
+                f"MaintenanceContact = '{self.ids.MaintenanceContact2.text}'," \
+                f"FirstUseTime = '{self.ids.FirstUseTime2.text}'," \
+                f"NextUpdateTime = '{self.ids.NextUpdateTime2.text}' " \
+                f"where RFID = '{self.ids.RFID1.text}'"
         print(query)
         self.db.insert_query(query)
         toast("Data Entry Updated !")
+        self.cleardatabase()
+        self.open_data_table()
+
+    def delete_entry_warning(self):
+        if not self.delete_warning:
+            self.delete_warning = MDDialog(
+                title="Delete ?",
+                text="Are you sure you want to delete this entry?.",
+                buttons=[
+                    MDFlatButton(
+                        text="CANCEL", text_color=self.theme_cls.primary_color,
+                        on_release=lambda _: self.delete_warning.dismiss()
+                    ),
+                    MDFlatButton(
+                        text="YES", text_color=self.theme_cls.primary_color, on_release=lambda _: self.delete_entry()
+                    ),
+                ],
+            )
+        self.delete_warning.open()
+
+
+    def delete_all_entry_warning(self):
+        if not self.delete_warning_all:
+            self.delete_warning_all = MDDialog(
+                title="Delete All ?",
+                text="Are you sure you want to delete all entries?.",
+                buttons=[
+                    MDFlatButton(
+                        text="CANCEL", text_color=self.theme_cls.primary_color,
+                        on_release=lambda _: self.delete_warning_all.dismiss()
+                    ),
+                    MDFlatButton(
+                        text="YES", text_color=self.theme_cls.primary_color, on_release=lambda _: self.delete_all_entries()
+                    ),
+                ],
+            )
+        self.delete_warning_all.open()
+
+
 
     def delete_entry(self):
         query = f"delete from demo where RFID = '{self.ids.RFID1.text}'"
         self.db.insert_query(query)
         toast("Data Entry Deleted!")
+        self.cleardatabase()
+        self.open_data_table()
+        self.delete_warning.dismiss()
         self.change_screen("screen5")
 
     def delete_all_entries(self):
         query = f"delete from demo"
         self.db.insert_query(query)
+        self.delete_warning_all.dismiss()
         toast("All Entries Deleted!")
         # self.change_screen("screen5")
 

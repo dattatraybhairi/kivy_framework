@@ -34,8 +34,17 @@ MyLayout:
                 pos_hint:{"top": 1}
                 elevation: 11
                 MDIconButton:
+                    icon: "brightness-6"
+                    user_font_size: "40sp"
+                    theme_text_color: "Custom"
+                    text_color: app.theme_cls.primary_color
+                    on_release: root.brightness()
+
+                MDIconButton:
                     icon: "power"
                     user_font_size: "40sp"
+                    theme_text_color: "Custom"
+                    text_color: app.theme_cls.primary_color
                     on_release: root.sleep()
 
             BoxLayout:
@@ -146,7 +155,7 @@ MyLayout:
                             on_release:root.open_data_table()
 
                         MDRectangleFlatButton:
-                            text: "             Database                "
+                            text: "               Database                "
                             text_color: app.theme_cls.primary_color
                             on_release:root.change_screen("screen5")
                             on_release:root.open_data_table()
@@ -187,13 +196,6 @@ MyLayout:
                     title: "Register"
                     pos_hint:{"top": 1}
                     spacing:"20dp"
-                    MDIconButton:
-                        icon: "arrow-left-bold-circle"
-                        user_font_size: "40sp"
-                        theme_text_color: "Custom"
-                        text_color: app.theme_cls.primary_color
-                        on_release: root.change_screen("screen2")
-                        on_release: root.clear_entries()
 
                     MDIconButton:
                         icon: "content-save-outline"
@@ -202,6 +204,15 @@ MyLayout:
                         text_color: app.theme_cls.primary_color
                         #on_release: root.change_screen("screen2")
                         on_release: root.inserting_into_database()
+
+                    MDIconButton:
+                        icon: "arrow-left-bold-circle"
+                        user_font_size: "40sp"
+                        theme_text_color: "Custom"
+                        text_color: app.theme_cls.primary_color
+                        on_release: root.change_screen("screen2")
+                        on_release: root.clear_entries()
+
 
                 MDTabs:
                     Tab:
@@ -527,7 +538,7 @@ MyLayout:
                             user_font_size: "140sp"
                             theme_text_color: "Custom"
                             text_color: app.theme_cls.primary_color
-                            on_release: root.delete_all_entries()
+                            on_release: root.delete_all_entry_warning()
                         MDRectangleFlatButton:
                             text: "          Delete Database        "
                             text_color: app.theme_cls.primary_color
@@ -580,6 +591,7 @@ MyLayout:
                         theme_text_color: "Custom"
                         text_color: app.theme_cls.primary_color
                         on_release: root.change_screen("screen3")
+                        on_release: root.disable_cam()
 
 
                 BoxLayout:
@@ -691,7 +703,7 @@ MyLayout:
                     user_font_size: "40sp"
                     theme_text_color: "Custom"
                     text_color: app.theme_cls.primary_color
-                    on_release: root.change_screen("screen2")
+                    on_release: root.change_screen("screen4")
 
             BoxLayout:
                 orientation: "horizontal"
@@ -777,7 +789,7 @@ MyLayout:
                         user_font_size: "40sp"
                         theme_text_color: "Custom"
                         text_color: app.theme_cls.primary_color
-                        on_release: root.delete_entry()
+                        on_release: root.delete_entry_warning()
 
 
                     MDIconButton:
