@@ -2,6 +2,7 @@
 import socket
 import asyncio
 from MySQLdb import IntegrityError
+from kivy.app import App
 from kivy.config import Config
 from kivy.core.image import Image
 from kivy.properties import StringProperty
@@ -19,7 +20,10 @@ from kivymd.uix.button import MDFlatButton, MDIconButton
 from kivymd.uix.dialog import MDDialog
 import os
 
+
+
 login_key = False
+
 
 class DbCon:
 
@@ -40,6 +44,12 @@ class DbCon:
         self.db.commit()
 
 
+class Content(BoxLayout):
+    id = StringProperty("search")
+    pass
+
+
+
 class Tab(FloatLayout, MDTabsBase):
     pass
 
@@ -50,6 +60,7 @@ class ListItemWithCheckbox(TwoLineIconListItem):
 
 
 class MyLayout(BoxLayout, MDApp):
+    contect = Content()
     dialog = None
     fileError = None
     wifi = None
@@ -59,6 +70,7 @@ class MyLayout(BoxLayout, MDApp):
     delete_warning_all = None
     db = DbCon()
     brightness_key = False
+    search = None
 
     # theme_cls = ThemeManager()
     def __init__(self, **kwargs):
@@ -147,18 +159,17 @@ class MyLayout(BoxLayout, MDApp):
             except IntegrityError as err:
                 print(err)
                 toast("Alredy exists !")
-
         else:
             toast("Please enter proper data !")
 
-    def calc(self, instance):
+    def calc(self, instance,):
         print(self.ids['qrlabel'].text)
         if self.login_key:
             print(self.ids['qrlabel'].text)
             if self.ids['qrlabel'].text != "":
                 self.scanned = str(self.ids['qrlabel'].text)
                 text = self.scanned.split("b")
-                self.ids["RFID"].text = str(text[1]).replace("'", "")
+                self.ids["RFID"].text = str(text[1]).replace("'","")
                 self.change_screen("screen3")
                 self.ids["zbarcam"].xcamera.play = False
             else:
@@ -300,6 +311,9 @@ class MyLayout(BoxLayout, MDApp):
                 )
             self.empty.open()
 
+    def search_row(self):
+        self.change_screen("search_window")
+
     def adding_new_record(self):
         self.change_screen("screen3")
         self.empty.dismiss()
@@ -307,7 +321,6 @@ class MyLayout(BoxLayout, MDApp):
     def empty_list_dissimis(self):
         self.change_screen("screen2")
         self.empty.dismiss()
-
 
     def cleardatabase(self):
         self.clear_entries()
@@ -335,7 +348,7 @@ class MyLayout(BoxLayout, MDApp):
         self.ids.EquipmentCategory2.text = self.rows[int(ListItemWithCheckbox.text) - 1][16]
         self.ids.Weight2.text = self.rows[int(ListItemWithCheckbox.text) - 1][17]
         self.ids.InventoryCode2.text = self.rows[int(ListItemWithCheckbox.text) - 1][18]
-        self.ids.LifeCycle2.text =self.rows[int(ListItemWithCheckbox.text) - 1][19]
+        self.ids.LifeCycle2.text = self.rows[int(ListItemWithCheckbox.text) - 1][19]
         self.ids.Power2.text = self.rows[int(ListItemWithCheckbox.text) - 1][20]
         self.ids.LastMaintenanceStaff2.text = self.rows[int(ListItemWithCheckbox.text) - 1][21]
         self.ids.MaintenanceCycle2.text = self.rows[int(ListItemWithCheckbox.text) - 1][22]
@@ -347,9 +360,6 @@ class MyLayout(BoxLayout, MDApp):
         self.ids.MaintenanceContact2.text = self.rows[int(ListItemWithCheckbox.text) - 1][28]
         self.ids.FirstUseTime2.text = self.rows[int(ListItemWithCheckbox.text) - 1][29]
         self.ids.NextUpdateTime2.text = self.rows[int(ListItemWithCheckbox.text) - 1][30]
-
-
-
         self.change_screen("screen9")
 
     def update_database(self):
@@ -409,6 +419,9 @@ class MyLayout(BoxLayout, MDApp):
         self.delete_warning.open()
 
 
+    def convert_to_csv(self):
+        pass
+
     def delete_all_entry_warning(self):
         if not self.delete_warning_all:
             self.delete_warning_all = MDDialog(
@@ -420,13 +433,12 @@ class MyLayout(BoxLayout, MDApp):
                         on_release=lambda _: self.delete_warning_all.dismiss()
                     ),
                     MDFlatButton(
-                        text="YES", text_color=self.theme_cls.primary_color, on_release=lambda _: self.delete_all_entries()
+                        text="YES", text_color=self.theme_cls.primary_color,
+                        on_release=lambda _: self.delete_all_entries()
                     ),
                 ],
             )
         self.delete_warning_all.open()
-
-
 
     def delete_entry(self):
         query = f"delete from demo where RFID = '{self.ids.RFID1.text}'"

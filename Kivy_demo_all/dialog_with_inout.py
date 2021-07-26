@@ -1,3 +1,4 @@
+from kivy.core.window import Window
 from kivy.lang import Builder
 from kivy.uix.boxlayout import BoxLayout
 
@@ -14,9 +15,8 @@ KV = '''
 
     MDTextField:
         hint_text: "City"
-
-    MDTextField:
-        hint_text: "Street"
+    Image:
+        source: 'bladfank.png'
 
 
 MDFloatLayout:
@@ -55,4 +55,5 @@ class Example(MDApp):
             )
         self.dialog.open()
 
+Window.size = (800, 480)
 Example().run()

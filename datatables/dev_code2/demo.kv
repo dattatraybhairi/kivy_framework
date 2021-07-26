@@ -13,6 +13,37 @@
         theme_text_color: "Custom"
         text_color: app.theme_cls.primary_color
 
+<Content>
+    orientation: "vertical"
+    spacing: "12dp"
+    size_hint_y: None
+    height: "90dp"
+
+    BoxLayout:
+        MDTextField:
+            id : search
+            hint_text: "Enter ID"
+        MDIconButton:
+            id: "scan_button"
+            icon: "data-matrix-scan"
+            user_font_size: "40sp"
+            theme_text_color: "Custom"
+            text_color: app.theme_cls.primary_color
+            on_release: app.scan()
+            on_release: app.search.dismiss()
+        MDIconButton:
+            id: "nfc_tag"
+            icon: "credit-card-wireless"
+            user_font_size: "50sp"
+            theme_text_color: "Custom"
+            text_color: app.theme_cls.primary_color
+            on_release: app.change_screen("screen10")
+            on_release: app.search.dismiss()
+    Image:
+        source: 'white.png'
+
+
+
 MyLayout:
     scr_mngr: scr_mngr
     orientation: 'vertical'
@@ -87,7 +118,6 @@ MyLayout:
                 text: "LOGIN"
                 pos_hint: {"center_x": 0.5, "center_y": 0.3}
                 on_release: root.check_data_login()
-
 #oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
 
         Screen:
@@ -556,7 +586,23 @@ MyLayout:
                     md_bg_color: 0, 0, 1, 1
                     id: toolbar
                     title: "DataBase"
-                    spacing:"20dp"
+                    spacing:"5dp"
+
+                    MDIconButton:
+                        icon: "import"
+                        user_font_size: "40sp"
+                        theme_text_color: "Custom"
+                        text_color: app.theme_cls.primary_color
+
+
+                    MDIconButton:
+                        icon: "magnify"
+                        user_font_size: "40sp"
+                        theme_text_color: "Custom"
+                        text_color: app.theme_cls.primary_color
+                        #on_release: root.change_screen("screen2")
+                        on_release:root.search_row()
+                        #on_release:
 
                     MDIconButton:
                         icon: "arrow-left-bold-circle"
@@ -1096,3 +1142,75 @@ MyLayout:
                     anim_delay: 0.015
                     mipmap: False
                     #anim_loop: 1
+
+
+
+
+###########################################################################
+
+        Screen:
+            id: search_window
+            name: 'search_window'
+
+            MDToolbar:
+                spacing:"20dp"
+                md_bg_color: 0, 0, 1, 1
+                title: "Search Window"
+                pos_hint:{"top": 1}
+                elevation: 11
+
+                MDIconButton:
+                    icon: "arrow-left-bold-circle"
+                    user_font_size: "40sp"
+                    theme_text_color: "Custom"
+                    text_color: app.theme_cls.primary_color
+                    on_release: root.change_screen("screen5")
+
+
+            BoxLayout:
+                orientation: "vertical"
+                padding: "50dp"
+                spacing: "10dp"
+                size_hint_y: None
+                height: self.minimum_height
+                pos_hint: {"center_y": .79}
+
+                MDLabel:
+                    text: "Search Records"
+                    halign: "center"
+                    font_style: "H4"
+                    size_hint_y: None
+
+            BoxLayout:
+                #orientation: "vertical"
+                padding: "50dp"
+                spacing: "10dp"
+                size_hint_y: None
+                height: self.minimum_height
+                pos_hint: {"center_y": .60}
+
+                MDTextField:
+                    id: username
+                    hint_text: "Enter ID Here "
+                    #helper_text_mode: "on_focus"
+                    required: True
+
+                MDIconButton:
+                    id: "scan_button"
+                    icon: "data-matrix-scan"
+                    user_font_size: "40sp"
+                    theme_text_color: "Custom"
+                    text_color: app.theme_cls.primary_color
+
+                MDIconButton:
+                    id: "nfc_tag"
+                    icon: "credit-card-wireless"
+                    user_font_size: "50sp"
+                    theme_text_color: "Custom"
+                    text_color: app.theme_cls.primary_color
+
+
+            MDRectangleFlatButton:
+                text: "Search"
+                pos_hint: {"center_x": 0.5, "center_y": 0.3}
+                on_release: root.check_data_login()
