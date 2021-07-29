@@ -1,6 +1,9 @@
 #!/usr/bin/env python
+import csv
 import socket
-import asyncio
+# import asyncio
+
+# import pandas as pd
 from MySQLdb import IntegrityError
 from kivy.app import App
 from kivy.config import Config
@@ -19,8 +22,6 @@ from kivymd.app import MDApp
 from kivymd.uix.button import MDFlatButton, MDIconButton
 from kivymd.uix.dialog import MDDialog
 import os
-
-
 
 login_key = False
 
@@ -49,7 +50,6 @@ class Content(BoxLayout):
     pass
 
 
-
 class Tab(FloatLayout, MDTabsBase):
     pass
 
@@ -71,6 +71,7 @@ class MyLayout(BoxLayout, MDApp):
     db = DbCon()
     brightness_key = False
     search = None
+    scan_text_key = ""
 
     # theme_cls = ThemeManager()
     def __init__(self, **kwargs):
@@ -162,23 +163,43 @@ class MyLayout(BoxLayout, MDApp):
         else:
             toast("Please enter proper data !")
 
-    def calc(self, instance,):
+    def calc(self, instance, ):
         print(self.ids['qrlabel'].text)
         if self.login_key:
             print(self.ids['qrlabel'].text)
             if self.ids['qrlabel'].text != "":
-                self.scanned = str(self.ids['qrlabel'].text)
-                text = self.scanned.split("b")
-                self.ids["RFID"].text = str(text[1]).replace("'","")
-                self.change_screen("screen3")
-                self.ids["zbarcam"].xcamera.play = False
+                if self.scan_text_key is None:
+                    self.scanned = str(self.ids['qrlabel'].text)
+                    text = self.scanned.split("b")
+                    self.ids["RFID"].text = str(text[1]).replace("'", "")
+                    self.ids["zbarcam"].xcamera.play = False
+                    self.change_screen("screen3")
+
+                elif self.scan_text_key == "search":
+                    self.scanned = str(self.ids['qrlabel'].text)
+                    text = self.scanned.split("b")
+                    self.ids["search_id"].text = str(text[1]).replace("'", "")
+                    self.ids["zbarcam"].xcamera.play = False
+                    self.change_screen("search_window")
+
+
+
             else:
                 self.change_screen("screen6")
                 self.ids["zbarcam"].xcamera.play = True
 
-    def scan(self):
+    def scan(self, key=None):
+        self.scan_text_key = key
         self.change_screen("screen6")
         self.ids["zbarcam"].xcamera.play = True
+
+    def scan_back_press(self, key=None):
+        if self.scan_text_key is None:
+            self.ids["zbarcam"].xcamera.play = False
+            self.change_screen("screen3")
+        elif self.scan_text_key == "search":
+            self.ids["zbarcam"].xcamera.play = False
+            self.change_screen("search_window")
 
     def clear_entries(self):
         self.ids.RFID.text = ""
@@ -289,7 +310,7 @@ class MyLayout(BoxLayout, MDApp):
                 self.ids.container.add_widget(
                     ListItemWithCheckbox(text=f"{count}",
                                          on_release=self.click,
-                                         secondary_text=f"{i[0]},{i[1]},{i[2]},{i[3]},{i[7]} ",
+                                         secondary_text=f"{i[0]}  {i[1]}  {i[2]}  {i[3]}  {i[4]} ",
                                          )
                 )
         else:
@@ -312,7 +333,54 @@ class MyLayout(BoxLayout, MDApp):
             self.empty.open()
 
     def search_row(self):
-        self.change_screen("search_window")
+        print(self.ids.search_id.text)
+        if self.ids.search_id.text:
+
+            self.index = self.db.c.execute(f"SELECT * FROM demo WHERE RFID = '{self.ids.search_id.text}'")
+            if self.index:
+                toast("Record Found !")
+                self.row = self.db.c.fetchone()
+                # self.click(ListItemWithCheckbox, self.index)
+                # print(self.rows)
+                self.ids.RFID1.text = self.row[0]
+                self.ids.AssetSN2.text = self.row[1]
+                self.ids.DataCenter2.text = self.row[2]
+                self.ids.Description2.text = self.row[3]
+                self.ids.DeviceModel2.text = self.row[4]
+                self.ids.Floor2.text = self.row[5]
+                self.ids.Manufacturer2.text = self.row[6]
+                self.ids.AssetUnitUsage2.text = self.row[7]
+                self.ids.Room2.text = self.row[8]
+                self.ids.SerialNumber2.text = self.row[9]
+                self.ids.RackNo2.text = self.row[10]
+                self.ids.Column2.text = self.row[11]
+                self.ids.Supplier2.text = self.row[12]
+                self.ids.Address2.text = self.row[13]
+                self.ids.MacAddress12.text = self.row[14]
+                self.ids.MacAddress22.text = self.row[15]
+                self.ids.EquipmentCategory2.text = self.row[16]
+                self.ids.Weight2.text = self.row[17]
+                self.ids.InventoryCode2.text = self.row[18]
+                self.ids.LifeCycle2.text = self.row[19]
+                self.ids.Power2.text = self.row[20]
+                self.ids.LastMaintenanceStaff2.text = self.row[21]
+                self.ids.MaintenanceCycle2.text = self.row[22]
+                self.ids.Current2.text = self.row[23]
+                self.ids.NextMaintenanceStaff2.text = self.row[24]
+                self.ids.Principal2.text = self.row[25]
+                self.ids.Voltage2.text = self.row[26]
+                self.ids.LastUpdatedTime2.text = self.row[27]
+                self.ids.MaintenanceContact2.text = self.row[28]
+                self.ids.FirstUseTime2.text = self.row[29]
+                self.ids.NextUpdateTime2.text = self.row[30]
+                self.ids.search_id.text = ""
+                self.change_screen("screen9")
+            else:
+                self.ids.search_id.text = ""
+                toast("No Record Found !")
+
+        else:
+            toast("Please Enter ID")
 
     def adding_new_record(self):
         self.change_screen("screen3")
@@ -328,6 +396,7 @@ class MyLayout(BoxLayout, MDApp):
 
     def click(self, ListItemWithCheckbox):
         # print(str(ListItemWithCheckbox.text))
+
         print(self.rows[int(ListItemWithCheckbox.text) - 1])
         self.ids.RFID1.text = self.rows[int(ListItemWithCheckbox.text) - 1][0]
         self.ids.AssetSN2.text = self.rows[int(ListItemWithCheckbox.text) - 1][1]
@@ -418,9 +487,17 @@ class MyLayout(BoxLayout, MDApp):
             )
         self.delete_warning.open()
 
-
     def convert_to_csv(self):
-        pass
+        # row = cursror.fetchall()
+        column_names = [i[0] for i in self.db.c.description]
+        print(column_names)
+        #df = pd.DataFrame(self.rows)
+        fp = open('out.csv', 'w')
+        myFile = csv.writer(fp, lineterminator='\n')
+        myFile.writerow(column_names)
+        myFile.writerows(self.rows)
+        fp.close()
+        toast(" Data Export in CSV")
 
     def delete_all_entry_warning(self):
         if not self.delete_warning_all:

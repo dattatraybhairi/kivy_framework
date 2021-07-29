@@ -283,6 +283,7 @@ MyLayout:
                                         theme_text_color: "Custom"
                                         text_color: app.theme_cls.primary_color
                                         on_release: root.change_screen("screen10")
+                                        on_release: root.read_xcard()
 
 
                                 MDTextField:
@@ -593,7 +594,7 @@ MyLayout:
                         user_font_size: "40sp"
                         theme_text_color: "Custom"
                         text_color: app.theme_cls.primary_color
-
+                        on_release: root.convert_to_csv()
 
                     MDIconButton:
                         icon: "magnify"
@@ -601,7 +602,7 @@ MyLayout:
                         theme_text_color: "Custom"
                         text_color: app.theme_cls.primary_color
                         #on_release: root.change_screen("screen2")
-                        on_release:root.search_row()
+                        on_release:root.change_screen("search_window")
                         #on_release:
 
                     MDIconButton:
@@ -636,7 +637,8 @@ MyLayout:
                         user_font_size: "40sp"
                         theme_text_color: "Custom"
                         text_color: app.theme_cls.primary_color
-                        on_release: root.change_screen("screen3")
+                        on_release:root.scan_back_press()
+                        #on_release: root.change_screen("screen3")
                         on_release: root.disable_cam()
 
 
@@ -660,6 +662,8 @@ MyLayout:
                         #text: 'rescan'
                         on_text: root.calc(self.text)
                         opacity: 1
+
+#################################################################################################
 
         MDScreen:
             id: screen7 #wifi-config
@@ -829,6 +833,7 @@ MyLayout:
                         text_color: app.theme_cls.primary_color
                         on_release: root.change_screen("screen5")
                         on_release: root.clear_entries()
+                        #on_release:root.open_data_table()
 
                     MDIconButton:
                         icon: "delete-empty"
@@ -871,22 +876,7 @@ MyLayout:
                                         hint_text: "RFID Physical No"
                                         helper_text_mode: "on_focus"
                                         required: True
-                                    MDIconButton:
-                                        id: "scan_button2"
-                                        icon: "data-matrix-scan"
-                                        user_font_size: "40sp"
-                                        theme_text_color: "Custom"
-                                        text_color: app.theme_cls.primary_color
-                                        on_release: root.scan()
-                                    MDIconButton:
-                                        id: "nfc_tag"
-                                        icon: "credit-card-wireless"
-                                        user_font_size: "50sp"
-                                        theme_text_color: "Custom"
-                                        text_color: app.theme_cls.primary_color
-                                        on_release: root.change_screen("screen10")
-
-
+                                        readonly: True
 
                                 MDTextField:
                                     id: AssetSN2
@@ -1190,10 +1180,10 @@ MyLayout:
                 pos_hint: {"center_y": .60}
 
                 MDTextField:
-                    id: username
+                    id: search_id
                     hint_text: "Enter ID Here "
                     #helper_text_mode: "on_focus"
-                    required: True
+                    #required: True
 
                 MDIconButton:
                     id: "scan_button"
@@ -1201,6 +1191,7 @@ MyLayout:
                     user_font_size: "40sp"
                     theme_text_color: "Custom"
                     text_color: app.theme_cls.primary_color
+                    on_release: root.scan("search")
 
                 MDIconButton:
                     id: "nfc_tag"
@@ -1208,9 +1199,9 @@ MyLayout:
                     user_font_size: "50sp"
                     theme_text_color: "Custom"
                     text_color: app.theme_cls.primary_color
-
+                    on_release : root.read_xcard()
 
             MDRectangleFlatButton:
                 text: "Search"
                 pos_hint: {"center_x": 0.5, "center_y": 0.3}
-                on_release: root.check_data_login()
+                on_release:root.search_row()

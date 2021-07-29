@@ -1,0 +1,16 @@
+[Unit]
+Description=Master Gateway Subscription Service
+
+
+[Service]
+Type=simple
+User=pi
+ExecStart=/usr/bin/python3 /home/pi/Vertive_SNMP_Gateway_V2.0.0/Vertive_Slave_gateway_v2.0.0/App/serial_write_v1.0.py
+
+# Increase the default a bit in order to allow many simultaneous
+# files to be monitored, we might need a lot of fds.
+
+[Install]
+WantedBy=multi-user.target
+
+
